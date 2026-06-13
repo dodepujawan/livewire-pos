@@ -31,6 +31,22 @@ npm_data/database.sqlite
 # TAMBAHAN TERBARU 13-5-2026
 npm_data/logs/
 
+# 13/6/2026
+# Laravel
+src/vendor/
+src/node_modules/
+
+src/.env
+src/.env.*
+
+src/storage/logs/*
+src/storage/framework/cache/*
+src/storage/framework/sessions/*
+src/storage/framework/views/*
+
+src/public/build/
+src/public/hot
+
 # Nginx Set Folder
 npm_data/
 npm_letsencrypt/
