@@ -46,7 +46,7 @@ src/storage/framework/cache/*
 src/storage/framework/sessions/*
 src/storage/framework/views/*
 
-src/public/build/
+# src/public/build/
 src/public/hot
 
 # Nginx Set Folder
