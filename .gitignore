@@ -33,6 +33,8 @@ npm_data/logs/
 
 # 13/6/2026
 # Laravel
+node_modules/
+
 src/vendor/
 src/node_modules/
 
