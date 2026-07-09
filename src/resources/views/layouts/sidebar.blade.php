@@ -92,7 +92,7 @@
         </div>
 
         <!-- TRANSAKSI -->
-        <div x-data="{ open: activeLink === 'pos-kasir' || activeLink === 'pos-admin' }">
+        <div x-data="{ open: activeLink === 'transaksi-list' || activeLink === 'transaksi-list' }">
             <button
                 @click="open = !open"
                 class="w-full flex justify-between px-2 py-2 hover:bg-gray-100 rounded text-gray-700"
@@ -101,22 +101,22 @@
                 <span x-text="open ? '-' : '+'"></span>
             </button>
             <div x-show="open" x-transition class="ml-4 mt-1 space-y-1">
-                <a href="#"
-                   @click="setActive('pos-kasir')"
-                   :class="activeLink === 'pos-kasir'
+                <a href="{{ route('transaksi-list') }}"
+                   @click="setActive('transaksi-list')"
+                   :class="activeLink === 'transaksi-list'
                        ? 'text-blue-600 font-semibold bg-blue-50'
                        : 'text-gray-700 hover:bg-gray-100'"
                    class="block px-2 py-1 rounded">
-                    POS Kasir
+                    Transaksi
                 </a>
-                <a href="#"
+                <!-- <a href="#"
                    @click="setActive('pos-admin')"
                    :class="activeLink === 'pos-admin'
                        ? 'text-blue-600 font-semibold bg-blue-50'
                        : 'text-gray-700 hover:bg-gray-100'"
                    class="block px-2 py-1 rounded">
                     POS Admin
-                </a>
+                </a> -->
             </div>
         </div>
     </nav>

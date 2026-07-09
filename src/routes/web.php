@@ -31,3 +31,11 @@ Route::prefix('master')->middleware('auth')->group(function () {
     Route::livewire('/barang/create', 'pages::master.barang-create')->name('barang-create');
     Route::livewire('/barang/{id}/edit', 'pages::master.barang-edit')->name('barang-edit');
 });
+
+// 
+Route::prefix('transaksi')->middleware('auth')->group(function () {
+    Route::livewire('/', 'pages::transaksi.transaksi-list')->name('transaksi-list');
+    Route::livewire('/create', 'pages::transaksi.transaksi-create')->name('transaksi-create');
+    Route::livewire('/{id}', 'pages::transaksi.transaksi-show')->name('transaksi-show');
+});
+
