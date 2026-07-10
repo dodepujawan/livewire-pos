@@ -139,3 +139,139 @@ Reviewed:
 
 Next Milestone:
 - Implement transaksi-show component
+
+#### Milestone 3.1 - transaksi-create Keyboard-First Workflow
+
+Status: ✅ Completed
+
+### Changed
+- Replaced product dropdown with kode_barang search.
+- Removed loading all products on render().
+- Added keyboard-first POS workflow.
+- Added searchBarang() method for Enter key product search.
+- Added browser focus events (focus-qty, focus-kode-barang).
+- Added lightweight product state (itemKodeBarang, itemNamaBarang, itemStok, itemSatuanList).
+- Updated resetItemForm() to clear new product state properties.
+- Updated transaction create workflow to use kode_barang input instead of dropdown.
+
+### Fixed
+- Prevent Enter key from submitting the form (wire:keydown.enter.prevent).
+- Improved barcode workflow with auto-focus management.
+- Reduced unnecessary database loading by removing eager loading on render().
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-create/transaksi-create.php
+- src/resources/views/pages/transaksi/⚡transaksi-create/transaksi-create.blade.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md.
+
+Next Milestone:
+- Implement transaksi-show component
+
+#### Milestone 4.2 - transaksi-create.blade.php Layout Proportion Refactor
+
+Status: ✅ Completed
+
+### Changed
+- Changed grid layout from grid-cols-12 (3-6-3) to custom CSS grid: 300px minmax(0,1fr) 300px.
+- Left and right columns now fixed at 300px width, middle column flexible.
+- Cart container changed from flex-1 to max-h-[calc(100vh-250px)] with overflow-y-auto.
+- Cart empty state limited to max-h-[200px] instead of full height stretch.
+- Added divide-y divide-gray-100 to cart tbody for visual row separation.
+- Removed flex-1 from left column card to eliminate unnecessary whitespace.
+- Moved Grand Total from middle column to right column (above Simpan button).
+- Grand Total now part of vertical payment flow: Total → Bayar → Kembali → Grand Total → Simpan.
+- Increased spacing consistency: gap-2, p-2, space-y-2 throughout.
+- Increased padding from p-1.5 to p-2 for better desktop legibility.
+- Added mr-1 mt-1 to header "Kembali" button for visual breathing room.
+- Removed sticky positioning from payment section (no longer needed with fixed layout).
+
+### Fixed
+- Eliminated cart over-stretch when empty or with few items.
+- Improved height alignment between three columns.
+- Better visual grouping of final action elements (Grand Total + Simpan).
+- Reduced excessive whitespace in left column.
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-create/transaksi-create.blade.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md Desktop UI Rules and POS UI Rules.
+- Verified keyboard workflow unchanged (wire:keydown.enter.prevent preserved).
+- Verified all wire:model bindings unchanged.
+- Verified element IDs unchanged (kode-barang-input, qty-input).
+
+Next Milestone:
+- Implement transaksi-show component
+
+#### Milestone 4.2.1 - transaksi-create.blade.php Layout Refinement
+
+Status: ✅ Completed
+
+### Fixed
+- Cart container no longer stretches full height when empty or with few items
+  - Removed flex-1 from cart container to eliminate forced full-height stretch
+  - Changed cart table container from max-h-[calc(100vh-250px)] to max-h-[60vh]
+  - Cart now follows natural height based on content, with scroll only when exceeding 60vh cap
+  - Empty state changed from max-h-[200px] to natural height with py-8 padding
+- Left column spacing increased for better readability
+  - Changed all labels and inputs from text-xs (12px) to text-sm (14px)
+  - Increased input padding from px-2 py-1 to px-3 py-2
+  - Increased field spacing from space-y-2 to space-y-3
+  - Increased card padding from p-2 to p-4 for header and add item sections
+  - Increased grid gap from gap-1.5 to gap-2 for input row
+  - Increased button padding from py-1.5 to py-2 for add to cart button
+  - Increased section heading margin from mb-2 to mb-3
+  - Increased barang details padding from p-1.5 to p-2
+
+### Changed
+- Cart container removed flex-col class to allow natural height behavior
+- Add item section removed flex-col from container (no longer needed)
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-create/transaksi-create.blade.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md Desktop UI Rules and POS UI Rules.
+- Verified keyboard workflow unchanged (wire:keydown.enter.prevent preserved).
+- Verified all wire:model bindings unchanged.
+- Verified element IDs unchanged (kode-barang-input, qty-input).
+
+Next Milestone:
+- Implement transaksi-show component
+
+#### Milestone 4.2.2 - transaksi-create.blade.php Layout Final Refinement
+
+Status: ✅ Completed
+
+### Fixed
+- Tambah Barang form layout changed from 5-column horizontal to 2x2 grid
+  - Changed from grid-cols-5 to grid-cols-2 for better fit in 300px width
+  - Row 1: Qty | Satuan
+  - Row 2: Harga | Diskon
+  - Subtotal full-width (col-span-2) below
+  - Prevents text truncation in narrow columns with text-sm + padding
+- Cart table column widths explicitly defined
+  - Added <colgroup> with fixed widths: No (28px), Barang (auto), Satuan (70px), Qty (60px), Harga (80px), Diskon (70px), Subtotal (80px), Aksi (60px)
+  - Added table-layout: fixed to prevent column collapse/truncation
+- Cart card height now follows content
+  - Removed any remaining flex/h-full classes from cart card
+  - Card height determined by table content + padding
+  - max-h-[60vh] with overflow-y-auto only activates when >10 rows
+  - Empty space below card is page background, not part of white card
+- Right column payment section simplified
+  - Removed redundant "Total" field (already shown in Grand Total)
+  - Reordered to: Bayar -> Kembali -> Grand Total -> Simpan -> Kembali(link)
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-create/transaksi-create.blade.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md Desktop UI Rules and POS UI Rules.
+- Verified keyboard workflow unchanged (wire:keydown.enter.prevent preserved).
+- Verified all wire:model bindings unchanged.
+- Verified element IDs unchanged (kode-barang-input, qty-input).
+
+Next Milestone:
+- Implement transaksi-show component

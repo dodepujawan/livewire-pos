@@ -177,22 +177,45 @@ Prioritas:
   1600x900
   1366x768
  
- # POS UI Rules
-Jangan membuat layout seperti form CRUD Laravel.
-Prioritaskan:
-Desktop First.
-Semua informasi penting harus terlihat tanpa scroll.
-Usahakan:
-Header
-Input Barang
-Cart
-Payment
-berada dalam satu viewport pada resolusi 1920x1080.
-Gunakan CSS Grid.
-Hindari card yang terlalu tinggi.
-Input item dibuat horizontal, bukan vertikal.
-Table cart mengambil ruang terbesar.
-Target pengguna adalah kasir desktop, bukan mobile.
+# 10. POS UI / UX Rules
+POS menggunakan pendekatan Desktop First.
+Prioritas utama:
+1. Keyboard lebih penting daripada mouse.
+2. Kecepatan input lebih penting daripada estetika.
+3. Semua informasi penting terlihat tanpa scroll.
+4. Cart adalah area kerja utama.
+5. Total pembayaran selalu terlihat.
+6. Fokus cursor selalu jelas.
+7. Jumlah klik seminimal mungkin.
+Target resolusi:
+- 1920x1080
+- 1600x900
+- 1366x768
+Hindari:
+- Card yang terlalu tinggi.
+- Banyak whitespace.
+- Form CRUD bertumpuk.
+- Layout mobile pada desktop.
+Gunakan:
+- CSS Grid.
+- Sticky footer.
+- Sticky cart header.
+- Overflow hanya pada tabel cart.
+
+## Inline Editing Rules
+
+Untuk tabel transaksi (cart):
+
+- Qty dapat diedit langsung pada tabel.
+- Diskon dapat diedit langsung pada tabel.
+- Perubahan harus langsung menghitung ulang:
+  - Subtotal baris.
+  - Grand Total.
+- Tidak menggunakan modal.
+- Tidak menggunakan halaman edit.
+- Tidak melakukan reload halaman.
+- Mendukung workflow keyboard (Tab / Enter).
+- Gunakan Livewire dengan update seminimal mungkin agar tetap responsif pada cart besar.
 
 # 9. Performance Rules
 

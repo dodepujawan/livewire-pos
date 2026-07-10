@@ -25,7 +25,7 @@ new class extends Component
     public int $itemStok = 0;
     public array $itemSatuanList = [];
     public int $itemBarangSatuanId = 0;
-    public int $itemQty = 1;
+    public $itemQty = 1;
     public $itemHarga = 0;
     public $itemDiskon = 0;
     public $itemSubtotal = 0;
@@ -129,12 +129,19 @@ new class extends Component
         $this->calculateItemSubtotal();
     }
 
+    private function toFloat($value): float
+    {
+        return $value === '' || $value === null
+            ? 0.0
+            : (float) $value;
+    }
+
     private function calculateItemSubtotal(): void
     {
         $harga = (float) $this->itemHarga;
         $qty = (int) $this->itemQty;
         $diskon = (float) $this->itemDiskon;
-        
+
         $this->itemSubtotal = ($harga * $qty) - $diskon;
     }
 
@@ -211,6 +218,38 @@ new class extends Component
     {
         unset($this->cartItems[$index]);
         $this->cartItems = array_values($this->cartItems);
+        $this->calculateGrandTotal();
+    }
+
+    public function updatedCartItems(): void
+    {
+        foreach ($this->cartItems as $index => $item) {
+            $qty = (int) $this->toFloat($item['qty'] ?? 0);
+            $diskon = $this->toFloat($item['diskon'] ?? 0);
+            $harga = (float) ($item['harga'] ?? 0);
+
+            if ($qty < 1) {
+                $qty = 1;
+                $this->cartItems[$index]['qty'] = 1;
+            }
+
+            $satuan = BarangSatuan::find($item['barang_satuan_id']);
+            $qtyPcs = $satuan ? $qty * $satuan->konversi : $qty;
+
+            $barang = Barang::find($item['barang_id']);
+            if ($barang && $barang->stok < $qtyPcs) {
+                session()->flash('error', 'Stok tidak mencukupi untuk ' . $item['nama_barang']);
+                $maxQty = floor($barang->stok / ($satuan ? $satuan->konversi : 1));
+                $this->cartItems[$index]['qty'] = max(1, $maxQty);
+                $qty = (int) $this->cartItems[$index]['qty'];
+                $qtyPcs = $satuan ? $qty * $satuan->konversi : $qty;
+            }
+
+            $subtotal = ($harga * $qty) - $diskon;
+            $this->cartItems[$index]['subtotal'] = $subtotal;
+            $this->cartItems[$index]['qty_pcs'] = $qtyPcs;
+        }
+
         $this->calculateGrandTotal();
     }
 

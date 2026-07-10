@@ -11,12 +11,15 @@ Modul transaksi penjualan untuk mencatat semua transaksi penjualan barang, menge
 3. Sistem generate nomor invoice otomatis (format: TRX-YYYYMMDD-XXXX)
 4. User input tanggal transaksi dan customer (opsional)
 5. User tambah barang ke keranjang:
-   - Pilih barang dari dropdown
-   - Pilih satuan dari dropdown (dynamic berdasarkan barang)
+   - Input kode barang (scan/ketik)
+   - Tekan Enter untuk mencari barang
+   - Sistem tampilkan nama barang dan stok
+   - Satuan pertama otomatis dipilih (prioritas konversi=1)
    - Input quantity
    - Sistem hitung harga berdasarkan satuan
    - Sistem hitung subtotal
    - Sistem hitung qty dalam pcs
+   - Tekan Enter pada qty untuk tambah ke keranjang
 6. User bisa edit atau hapus item dari keranjang
 7. User input nominal pembayaran
 8. Sistem hitung kembalian
@@ -76,22 +79,26 @@ protected $casts = [
 public string $transNoInvoice = '';
 public string $transTanggal = '';
 public string $transCustomer = '';
-public float $transGrandTotal = 0;
+public $transGrandTotal = 0;
 
 // Cart
 public array $cartItems = [];
 
 // Single Item Form
+public string $itemKodeBarang = '';
 public int $itemBarangId = 0;
+public string $itemNamaBarang = '';
+public int $itemStok = 0;
+public array $itemSatuanList = [];
 public int $itemBarangSatuanId = 0;
 public int $itemQty = 1;
-public float $itemHarga = 0;
-public float $itemDiskon = 0;
-public float $itemSubtotal = 0;
+public $itemHarga = 0;
+public $itemDiskon = 0;
+public $itemSubtotal = 0;
 
 // Payment
-public float $bayarNominal = 0;
-public float $kembaliNominal = 0;
+public $bayarNominal = 0;
+public $kembaliNominal = 0;
 ```
 
 Note: `transCustomer` is used (string) instead of `transCustomerId` to match the actual database schema where customer is a string field, not a foreign key.
@@ -130,8 +137,10 @@ $lastInvoice = Transaksi::whereDate('tanggal', today())
     ->orderBy('id', 'desc')
     ->first();
 
-// Get barang with satuan
-Barang::with('satuan')->get();
+// Search barang by kode_barang
+Barang::where('kode_barang', strtoupper($kodeBarang))
+    ->with('satuan')
+    ->first();
 
 // Check stock availability
 Barang::where('id', $barangId)
@@ -163,9 +172,10 @@ protected $rules = [
 // Header
 'transNoInvoice' => 'required|string|unique:transaksi,nomor_transaksi',
 'transTanggal' => 'required|date',
-'transCustomerId' => 'nullable|string',
+'transCustomer' => 'nullable|string',
 
 // Item
+'itemKodeBarang' => 'nullable|string',
 'itemBarangId' => 'required|exists:barang,id',
 'itemBarangSatuanId' => 'required|exists:barang_satuan,id',
 'itemQty' => 'required|integer|min:1',
@@ -198,28 +208,31 @@ protected $rules = [
 
 ### transaksi-create
 
+- Layout: 3-column grid (300px fixed left, flexible middle, 300px fixed right)
 - Header section:
   - Nomor Invoice (readonly)
   - Tanggal (date picker)
   - Customer (input)
-- Grand total display (readonly)
-- Cart section:
+- Cart section (middle column):
   - Table item yang ditambahkan
   - Column: No, Barang, Satuan, Qty, Harga, Diskon, Subtotal, Action
-- Add item section:
-  - Dropdown barang
-  - Dropdown satuan (dynamic)
-  - Input qty
+  - Max-height dengan overflow scroll untuk item banyak
+- Add item section (left column):
+  - Input kode barang (scan/ketik, Enter untuk cari)
+  - Display nama barang dan stok (setelah search)
+  - Input qty (Enter untuk tambah ke keranjang)
+  - Dropdown satuan (dynamic, auto-select satuan pertama)
   - Input harga (readonly)
   - Input diskon
   - Subtotal (readonly)
-  - Button "Tambah"
-- Payment section:
-  - Grand total
+  - Button "Tambah ke Keranjang"
+- Payment section (right column):
+  - Total tagihan
   - Input bayar nominal
   - Kembalian (readonly)
-  - Button "Simpan Transaksi"
-- Button "Kembali"
+  - Grand Total display (di atas tombol Simpan)
+  - Button "Simpan"
+  - Button "Kembali"
 
 ### transaksi-show
 
@@ -255,14 +268,18 @@ protected $rules = [
    - ✅ Implement responsive design
 
 3. **Milestone 3**: transaksi-create component
-   - Setup property
-   - Implement generate invoice number
-   - Implement add to cart logic
-   - Implement edit/remove cart item
-   - Implement payment calculation
-   - Implement save transaction dengan DB transaction
-   - Implement stock deduction
-   - Create blade template
+   - ✅ Setup property
+   - ✅ Implement generate invoice number
+   - ✅ Implement add to cart logic
+   - ✅ Implement edit/remove cart item
+   - ✅ Implement payment calculation
+   - ✅ Implement save transaction dengan DB transaction
+   - ✅ Implement stock deduction
+   - ✅ Create blade template
+   - ✅ Implement kode_barang search (Enter key)
+   - ✅ Implement auto-select first satuan
+   - ✅ Implement keyboard workflow
+   - ✅ Implement focus management
 
 4. **Milestone 4**: transaksi-show component
    - Setup property

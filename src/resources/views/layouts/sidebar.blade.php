@@ -101,7 +101,7 @@
                 <span x-text="open ? '-' : '+'"></span>
             </button>
             <div x-show="open" x-transition class="ml-4 mt-1 space-y-1">
-                <a href="{{ route('transaksi-list') }}"
+                <a href="{{ route('transaksi-list') }}" wire:navigate
                    @click="setActive('transaksi-list')"
                    :class="activeLink === 'transaksi-list'
                        ? 'text-blue-600 font-semibold bg-blue-50'
