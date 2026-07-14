@@ -37,5 +37,6 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::transaksi.transaksi-list')->name('transaksi-list');
     Route::livewire('/create', 'pages::transaksi.transaksi-create')->name('transaksi-create');
     Route::livewire('/{id}', 'pages::transaksi.transaksi-show')->name('transaksi-show');
+    Route::livewire('/{id}/edit', 'pages::transaksi.transaksi-edit')->name('transaksi-edit');
 });
 

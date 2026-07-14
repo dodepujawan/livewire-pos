@@ -251,6 +251,11 @@ new class extends Component
         }
 
         $this->calculateGrandTotal();
+        
+        // Recalculate kembaliNominal after grand total changes
+        $bayar = (float) $this->bayarNominal;
+        $grandTotal = (float) $this->transGrandTotal;
+        $this->kembaliNominal = $bayar - $grandTotal;
     }
 
     private function calculateGrandTotal(): void
@@ -316,6 +321,7 @@ new class extends Component
                     'barang_satuan_id' => $item['barang_satuan_id'],
                     'qty' => $item['qty'],
                     'harga' => $item['harga'],
+                    'diskon' => $item['diskon'],
                     'subtotal' => $item['subtotal'],
                     'qty_pcs' => $item['qty_pcs'],
                 ]);

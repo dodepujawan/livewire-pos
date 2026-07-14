@@ -275,3 +275,84 @@ Reviewed:
 
 Next Milestone:
 - Implement transaksi-show component
+
+#### Milestone 5 - transaksi-edit component (Backend)
+
+Status: ✅ Completed
+
+Changes:
+- Added transaksiId property for mount parameter.
+- Reused all properties from transaksi-create (header, cartItems, single item form, payment).
+- Implemented mount(int $transaksiId) to load existing transaction data.
+- Load transaksi with eager loading: Transaksi::with(['details.barang', 'details.satuan']).
+- Convert existing transaksi details to cartItems array format.
+- Set payment nominal to match grand total on load.
+- Reused all cart logic from transaksi-create:
+  - searchBarang() for product search
+  - updatedItemBarangSatuanId() for price auto-update on satuan change
+  - updatedItemQty(), updatedItemDiskon() for real-time calculation
+  - addToCart() with stock validation and duplicate handling
+  - removeFromCart() for item deletion
+  - updatedCartItems() for inline editing with stock validation
+  - calculateGrandTotal() for total calculation
+  - resetItemForm() for form reset
+  - updatedBayarNominal() for payment calculation
+  - toFloat() helper for numeric normalization
+- Implemented saveTransaksi() with complete stock adjustment algorithm:
+  - BEGIN TRANSACTION for atomic operations
+  - lockForUpdate() all affected barang (old and new) to prevent race condition
+  - Restore old stock: increment stok by qty_pcs from old details
+  - Update transaksi header (tanggal, customer, grand_total)
+  - Delete old transaksi details and insert new details (Delete+Insert strategy)
+  - Deduct new stock: decrement stok by qty_pcs from new details with validation
+  - Update stock mutation: delete old mutations, create new mutations with "Edit Transaksi" prefix
+  - COMMIT on success, ROLLBACK on error
+- Redirect to transaksi-show after successful update.
+- Validation rules updated (removed transNoInvoice unique validation, kept other rules).
+- Stock adjustment algorithm correctness verified for:
+  - Qty changes
+  - Satuan changes
+  - Item deletion
+  - Item addition
+  - Combined scenarios
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-edit/transaksi-edit.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md and MODULE_TRANSAKSI.md design.
+- Verified stock adjustment algorithm follows approved 6-step process.
+- Verified lockForUpdate() prevents race conditions.
+- Verified Delete+Insert strategy for detail updates.
+- Verified reuse of transaksi-create logic for consistency.
+
+Next Milestone:
+- Implement transaksi-edit.blade.php
+
+#### Milestone 6 - transaksi-edit.blade.php
+
+Status: ✅ Completed
+
+Changes:
+- Implemented desktop-first UI by reusing transaksi-create.blade.php design.
+- Changed page title from "Buat Transaksi" to "Edit Transaksi".
+- All other UI elements identical to transaksi-create:
+  - Header section with invoice (readonly), date picker, customer input
+  - Add item form with kode barang search, qty, satuan, harga, diskon, subtotal
+  - Cart table with inline editing for qty and diskon
+  - Payment section with bayar, kembalian, grand total display
+  - Action buttons (Simpan, Kembali)
+- All wire:model bindings preserved from transaksi-create.
+- Keyboard-first workflow preserved (Enter key handling, focus management).
+- Layout proportions preserved (300px fixed left/right columns, flexible middle column).
+
+Files:
+- src/resources/views/pages/transaksi/⚡transaksi-edit/transaksi-edit.blade.php
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md Desktop UI Rules and POS UI Rules.
+- Verified UI consistency with transaksi-create.
+- Verified no PHP modifications (as requested).
+
+Next Milestone:
+- Implement transaksi-show component

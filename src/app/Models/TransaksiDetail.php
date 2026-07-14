@@ -15,6 +15,7 @@ class TransaksiDetail extends Model
         'barang_satuan_id',
         'qty',
         'harga',
+        'diskon',
         'subtotal',
         'qty_pcs',
     ];
