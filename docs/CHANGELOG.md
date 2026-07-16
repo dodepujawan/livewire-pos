@@ -4,6 +4,324 @@ All notable changes to this project will be documented here.
 
 ---
 
+## 2026-07-16
+
+### Module: Auth
+
+#### Milestone 1 - Database & Model Setup
+
+Status: ✅ Completed
+
+Changes:
+- Created migration for menus table
+- Created Menu model with scopes for filtering
+- Created config/auth_sync.php with complete configuration
+- Implemented database schema following approved architecture:
+  - menus table with route_name, permission_name, display_name, group, icon, sort_order
+  - is_metadata_manual flag for protecting manual edits
+  - is_active and show_in_sidebar for soft delete and visibility control
+  - parent_route_name for nested menu support
+- Implemented Menu model with useful scopes:
+  - scopeActive() - filter active menus
+  - scopeInSidebar() - filter sidebar menus
+  - scopeAutoMetadata() - filter auto-generated metadata
+  - scopeManualMetadata() - filter manually edited metadata
+  - scopeByGroup() - filter by group
+  - scopeOrdered() - sort by sort_order
+- Created auth_sync.php config with:
+  - default_role configuration (configurable via .env)
+  - auto_assign_to_default_role setting
+  - role_blacklist for excluding specific roles
+  - route_permission_map for explicit route → permission mapping
+  - default_mapping pattern for convention-based mapping
+  - ignorable_routes list for excluding Laravel default routes
+  - group_rules for auto-generating menu groups
+  - display_name_rules for auto-generating display names
+
+Architecture Notes:
+- Route is source of truth for component mapping
+- Permission represents module capability, not route name
+- Using Spatie Permission for roles and permissions (no custom tables)
+- component_name NOT stored in database (retrieved from Router)
+- Single config file for all sync configuration
+- Metadata protected by is_metadata_manual flag
+
+Files:
+- src/database/migrations/2026_07_16_000000_create_menus_table.php
+- src/app/Models/Menu.php
+- src/config/auth_sync.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified migration follows Laravel conventions
+- Verified model follows project coding style
+- Verified config follows approved architecture
+
+Next Milestone:
+- Implement Artisan Command Sync (php artisan app:sync-auth)
+
+#### Milestone 2 - Artisan Command Sync
+
+Status: ✅ Completed
+
+Changes:
+- Created Artisan Command: php artisan app:sync-auth
+- Implemented route reading logic:
+  - Read all routes from Route::getRoutes()
+  - Filter only Livewire routes using isLivewireRoute()
+  - Filter only routes with name()
+- Implemented ignorable routes logic:
+  - Read ignorable_routes from config/auth_sync.php
+  - Use wildcard pattern matching with Str::is()
+  - Ignore Laravel default routes (login, logout, password.*, sanctum.*, etc.)
+- Implemented menu synchronization logic:
+  - Create new menus for routes not in database
+  - Reactivate inactive menus that exist again in routes
+  - Deactivate active menus that no longer exist in routes (soft delete)
+- Implemented metadata generation:
+  - Generate permission_name using route_permission_map or default_mapping
+  - Generate display_name from route_name with title case
+  - Generate group from route_name using group_rules or title case fallback
+  - Set is_metadata_manual = false for new menus (protects manual edits)
+- Added dry-run mode (--dry-run option):
+  - Show what would be done without making changes
+  - Display routes to add, reactivate, and deactivate
+- Created Console Kernel to register commands
+- Command output shows:
+  - Total Livewire routes found
+  - Routes to add, reactivate, deactivate
+  - Progress for each operation
+
+Architecture Notes:
+- Route is source of truth for menu existence
+- Metadata only generated on first creation (is_metadata_manual = false)
+- Existing manual metadata is protected (not overwritten)
+- Soft delete for removed routes (is_active = false)
+- Permission name generated from config mapping, not route name
+- Idempotent: can be run multiple times safely
+
+Files:
+- src/app/Console/Commands/SyncAuthCommand.php
+- src/app/Console/Kernel.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified command follows Laravel conventions
+- Verified logic matches approved architecture
+- Verified metadata protection with is_metadata_manual flag
+
+Next Milestone:
+- Implement Permission Sync to Spatie
+
+#### Milestone 2.1 - SyncAuthCommand Improvements
+
+Status: ✅ Completed
+
+Changes:
+- Improved Livewire route detection:
+  - Added Reflection-based class parent checking
+  - Check if controller extends Livewire component class
+  - More robust than string-based detection
+  - Fallback to string-based detection if reflection fails
+- Added informative synchronization summary:
+  - Total routes found
+  - Menus created, reactivated, deactivated
+  - Total active menus count
+  - Formatted summary section for easy reading
+
+Architecture Notes:
+- Reflection-based detection is more reliable for Livewire MFC
+- Summary output helps developer understand sync results quickly
+
+Files:
+- src/app/Console/Commands/SyncAuthCommand.php
+
+Reviewed:
+- Self review completed
+- Verified improved detection logic
+- Verified summary output format
+
+Next Milestone:
+- Implement Permission Sync to Spatie
+
+#### Milestone 3 - Permission Sync to Spatie
+
+Status: ✅ Completed
+
+Changes:
+- Implemented permission synchronization to Spatie:
+  - Added Spatie Permission models import
+  - Created syncPermissions() method
+  - Sync all active menus to Spatie permissions table
+  - Only create new permissions, don't update existing
+- Implemented auto-assign to default role:
+  - Read default_role from config/auth_sync.php
+  - Read auto_assign_to_default_role setting
+  - Read role_blacklist for excluding specific roles
+  - Auto-assign new permissions to default role
+  - Skip auto-assign if role is in blacklist
+  - Handle case when default role doesn't exist
+- Added permission sync to dry-run mode:
+  - Show permissions that would be created
+  - Show permissions that would be assigned
+  - No actual changes in dry-run mode
+- Updated command output:
+  - Show permissions created count
+  - Show permissions assigned count
+  - Warning if default role not found
+- Integrated permission sync into main sync flow:
+  - Called after menu synchronization
+  - Uses same dry-run flag
+
+Architecture Notes:
+- Using Spatie Permission API (Permission::create, Role::givePermissionTo)
+- Only creates new permissions, doesn't modify existing
+- Configurable default role via .env
+- Respects role blacklist for auto-assign
+- Idempotent: can be run multiple times safely
+
+Files:
+- src/app/Console/Commands/SyncAuthCommand.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified Spatie Permission API usage
+- Verified config integration
+- Verified auto-assign logic with blacklist
+
+Next Milestone:
+- Implement Permission Matrix UI
+
+#### Milestone 4 - Permission Matrix UI
+
+Status: ✅ Completed
+
+Changes:
+- Created Permission Matrix Livewire component:
+  - Component folder: resources/views/pages/auth/⚡permission-matrix/
+  - Component class: permission-matrix.php
+  - Blade template: permission-matrix.blade.php
+- Implemented role and permission loading:
+  - Load all roles from Spatie Role model
+  - Load all permissions from Spatie Permission model
+  - Load existing role-permission assignments into array
+- Implemented permission toggle logic:
+  - togglePermission() method for checkbox interaction
+  - Uses Spatie Permission API (givePermissionTo, revokePermissionTo)
+  - Updates rolePermissions array in real-time
+  - hasPermission() helper for checking assignment status
+- Created desktop-first UI for permission matrix:
+  - Table layout with roles as rows, permissions as columns
+  - Sticky first column (Role) for horizontal scrolling
+  - Checkbox-based permission assignment
+  - Info banner explaining usage
+  - Summary section showing total roles, permissions, and assignments
+  - Empty state with instruction to run sync-auth command
+- Added route: auth/permission-matrix (protected by auth middleware)
+- Used wire:navigate for navigation back to user list
+- Responsive design with horizontal scroll overflow for large permission sets
+
+Architecture Notes:
+- Using Spatie Permission API for all permission operations
+- Matrix UI provides visual overview of role-permission relationships
+- Real-time toggle without page reload using Livewire
+- Idempotent: can be run multiple times safely
+- Follows Livewire MFC structure (component folder with separate files)
+
+Files:
+- src/resources/views/pages/auth/⚡permission-matrix/permission-matrix.php
+- src/resources/views/pages/auth/⚡permission-matrix/permission-matrix.blade.php
+- src/routes/web.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified Livewire MFC structure compliance
+- Verified Spatie Permission API usage
+- Verified desktop-first UI design
+- Verified wire:navigate usage
+
+Next Milestone:
+- Implement Sidebar Builder
+
+#### Milestone 5 - Sidebar Builder
+
+Status: ✅ Completed
+
+Changes:
+- Created SidebarService for menu filtering logic:
+  - Service class: app/Services/SidebarService.php
+  - getMenuTree() method to retrieve filtered menu hierarchy
+  - buildMenuTree() method to build parent-child hierarchy from flat menu list
+- Implemented menu filtering based on user permissions:
+  - Uses Spatie Permission API (user->can()) for permission checking
+  - Filters menus that user has permission to access
+  - Menus without permission requirement are shown to all users
+- Implemented inactive menu filtering:
+  - Uses Menu::active() scope to filter is_active = true
+  - Inactive menus are excluded from sidebar
+- Implemented show_in_sidebar filtering:
+  - Uses Menu::inSidebar() scope to filter show_in_sidebar = true
+  - Menus marked as not showing in sidebar are excluded
+- Implemented parent-child menu hierarchy support:
+  - Supports nested menu structure using parent_route_name
+  - Builds tree structure from flat menu list
+  - Child menus are nested under parent menus
+- Implemented sort_order support:
+  - Uses Menu::ordered() scope for sorting
+  - Sorts root menus by sort_order
+  - Sorts child menus by sort_order within each parent
+- Created Sidebar Livewire component:
+  - Component folder: resources/views/components/⚡sidebar/
+  - Component class: sidebar.php
+  - Blade template: sidebar.blade.php
+  - mount() method loads menu tree from SidebarService
+- Created simple sidebar UI:
+  - Single menu items displayed as links
+  - Parent menus with children displayed as collapsible sections
+  - Uses Alpine.js for toggle functionality
+  - Supports icon display from menu metadata
+  - Empty state when no menus available
+- Integrated sidebar into layout:
+  - Updated layouts/sidebar.blade.php to use Livewire component
+  - Replaced hardcoded menu items with dynamic @livewire directive
+  - Maintains existing sidebar structure and styling
+
+Architecture Notes:
+- Sidebar does not read Route directly
+- Sidebar does not read Permission directly
+- Sidebar only receives pre-filtered Menu data from SidebarService
+- Menu is the source of truth for sidebar data
+- Business logic authorization is in SidebarService, not in Blade
+- Uses native Spatie Permission API (user->can())
+- Follows Livewire MFC structure (component folder with separate files)
+- Simple UI design as requested
+
+Files:
+- src/app/Services/SidebarService.php
+- src/resources/views/components/⚡sidebar/sidebar.php
+- src/resources/views/components/⚡sidebar/sidebar.blade.php
+- src/resources/views/layouts/sidebar.blade.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified SidebarService handles all business logic
+- Verified no authorization logic in Blade
+- Verified Spatie Permission API usage
+- Verified Livewire MFC structure compliance
+- Verified all filtering requirements met
+- Verified parent-child hierarchy support
+- Verified sort_order support
+
+Next Milestone:
+- Implement Middleware Authorization
+
+---
+
 ## 2026-07-08
 
 ### Module: Transaksi

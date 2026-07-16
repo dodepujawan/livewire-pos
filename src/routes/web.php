@@ -23,6 +23,7 @@ Route::prefix('auth')->group(function () {
     Route::livewire('/register', 'pages::auth.register')->middleware('auth')->name('register');
     Route::livewire('/register-list', 'pages::auth.register-list')->middleware('auth')->name('register-list');
     Route::livewire('/register/{id}/edit', 'pages::auth.register-edit')->name('register-edit');
+    Route::livewire('/permission-matrix', 'pages::auth.permission-matrix')->middleware('auth')->name('permission-matrix');
 });
 
 // Barang
