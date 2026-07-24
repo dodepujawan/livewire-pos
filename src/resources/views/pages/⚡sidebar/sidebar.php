@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\SidebarService;
 use Livewire\Component;
 
 new class extends Component
@@ -9,8 +8,8 @@ new class extends Component
 
     public function mount(): void
     {
-        $sidebarService = new SidebarService();
-        $this->menuTree = $sidebarService->getMenuTree();
+        // TODO: Implement new sidebar logic
+        $this->menuTree = [];
     }
 
     public function render()

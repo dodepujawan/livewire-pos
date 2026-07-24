@@ -320,6 +320,117 @@ Reviewed:
 Next Milestone:
 - Implement Middleware Authorization
 
+#### Milestone 6 - Middleware Authorization
+
+Status: ✅ Completed
+
+Changes:
+- Created CheckPermission middleware for route-permission mapping:
+  - Middleware class: app/Http/Middleware/CheckPermission.php
+  - handle() method for authorization logic
+- Implemented permission check using Menu table and Spatie API:
+  - Gets current route name from request
+  - Finds menu entry for the route in menus table
+  - If no menu entry exists, allows access (route not managed by auth system)
+  - If menu has no permission requirement, allows access
+  - Uses Spatie Permission API (user->can()) to check user permission
+  - Aborts with 403 if user lacks required permission
+- Registered middleware in bootstrap/app.php:
+  - Added middleware alias 'permission' pointing to CheckPermission class
+  - Uses Laravel 12 middleware configuration pattern
+- Applied middleware to protected routes:
+  - Added 'permission' middleware to all auth routes (register, register-list, register-edit, permission-matrix)
+  - Added 'permission' middleware to all master routes (barang-list, barang-create, barang-edit)
+  - Added 'permission' middleware to all transaksi routes (transaksi-list, transaksi-create, transaksi-show, transaksi-edit)
+  - Middleware applied after 'auth' middleware to ensure user is authenticated first
+- Middleware authorization logic:
+  - Unauthenticated users are passed through (handled by auth middleware)
+  - Routes without names are allowed access (edge case handling)
+  - Routes without menu entries are allowed access (not managed by auth system)
+  - Routes without permission requirements are allowed access (public routes)
+  - Routes with permission requirements check user permissions via Spatie API
+
+Architecture Notes:
+- Middleware uses Menu table as source of truth for route-permission mapping
+- Uses native Spatie Permission API (user->can()) for permission checking
+- Follows Laravel 12 middleware registration pattern in bootstrap/app.php
+- Graceful degradation for routes not managed by auth system
+- Single responsibility: only handles authorization, not authentication
+- Idempotent: can be called multiple times safely
+
+Files:
+- src/app/Http/Middleware/CheckPermission.php
+- src/bootstrap/app.php
+- src/routes/web.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified middleware follows Laravel conventions
+- Verified Spatie Permission API usage
+- Verified Menu table integration
+- Verified middleware registration in bootstrap/app.php
+- Verified middleware application to protected routes
+- Verified graceful degradation for edge cases
+
+Next Milestone:
+- Module Auth implementation complete
+
+#### AUTH Framework Design Change - Permission vs Menu Separation
+
+Status: ✅ Completed
+
+Changes:
+- Separated Permission and Menu concepts in SyncAuthCommand:
+  - Permission: Created for ALL Livewire routes
+  - Menu: Only created for routes without required parameters
+- Added isMenuEligibleRoute() method:
+  - Uses Laravel API: $route->parameterNames()
+  - Returns true if route has no required parameters
+  - Returns false if route has parameters (e.g., {id}, {slug})
+- Updated route filtering logic:
+  - Separates routes into menu-eligible and parameterized routes
+  - Menu-eligible routes: Routes without parameters
+  - Parameterized routes: Routes with parameters (no menu, but still have permission)
+- Updated syncPermissions() method:
+  - Now accepts routes parameter instead of using active menus
+  - Creates permissions for ALL routes, not just menu-eligible routes
+  - Ensures parameterized routes still have permissions for authorization
+- Updated command output:
+  - Shows total routes found
+  - Shows menu-eligible routes count
+  - Shows parameterized routes count
+  - Lists parameterized routes with their parameters in dry-run mode
+  - Shows menus created, reactivated, deactivated
+- Updated MODULE_AUTH.md:
+  - Added "Permission vs Menu" section
+  - Explains that Permission is for all routes
+  - Explains that Menu is only for routes without parameters
+  - Documents the reasoning: Sidebar must be valid
+
+Architecture Notes:
+- Permission ≠ Menu
+- Permission represents authorization capability for a route
+- Menu represents navigation capability (must be directly accessible)
+- Routes with parameters cannot be called with route($routeName) without arguments
+- This separation prevents "Missing required parameter" errors in Sidebar
+- Parameterized routes (edit, show) still have permissions for middleware authorization
+- Only menu-eligible routes (list, create) appear in Sidebar
+
+Files:
+- src/app/Console/Commands/SyncAuthCommand.php
+- docs/MODULE_AUTH.md
+
+Reviewed:
+- Self review completed against PROJECT_RULE.md
+- Verified parameterNames() API usage is correct for Laravel 12
+- Verified Permission creation for all routes
+- Verified Menu creation only for parameterless routes
+- Verified separation of concerns between authorization and navigation
+
+Next Milestone:
+- None (AUTH Framework complete)
+
 ---
 
 ## 2026-07-08

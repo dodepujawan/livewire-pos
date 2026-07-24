@@ -29,6 +29,25 @@ Dokumentasi sistem Authentication dan Authorization.
 - Route hanya digunakan untuk menemukan halaman
 - Permission merepresentasikan kemampuan terhadap modul, bukan nama route
 
+### Permission vs Menu
+
+**Permission:**
+- Dibuat untuk semua Livewire Route
+- Digunakan untuk otorisasi akses ke halaman
+- Route dengan parameter tetap memiliki Permission
+- Contoh: `barang-edit`, `transaksi-show`, `transaksi-edit` tetap memiliki Permission
+
+**Menu:**
+- Hanya dibuat untuk Route yang dapat diakses langsung tanpa parameter
+- Digunakan untuk navigasi di Sidebar
+- Route dengan parameter TIDAK menjadi Menu
+- Contoh: `barang-list` menjadi Menu, `barang-edit` TIDAK menjadi Menu
+
+**Alasan:**
+- Route dengan parameter (seperti `{id}`) tidak dapat dipanggil menggunakan `route($routeName)`
+- Menus di Sidebar harus dapat diakses langsung tanpa parameter
+- Memisahkan Permission dan Menu memastikan Sidebar selalu valid
+
 ### Database Schema
 - **menus** (custom table): Metadata menu dari route
 - **roles, permissions, model_has_roles, role_has_permissions** (Spatie): Role dan Permission
@@ -54,4 +73,4 @@ Contoh:
 - [x] Milestone 3 - Permission Sync to Spatie
 - [x] Milestone 4 - Permission Matrix UI
 - [x] Milestone 5 - Sidebar Builder
-- [ ] Milestone 6 - Middleware Authorization
+- [x] Milestone 6 - Middleware Authorization

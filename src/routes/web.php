@@ -19,11 +19,11 @@ Route::get('/dashboard', function () {
 })->middleware('auth')->name('dashboard');
 
 // Register
-Route::prefix('auth')->group(function () {
-    Route::livewire('/register', 'pages::auth.register')->middleware('auth')->name('register');
-    Route::livewire('/register-list', 'pages::auth.register-list')->middleware('auth')->name('register-list');
+Route::prefix('auth')->middleware('auth')->group(function () {
+    Route::livewire('/register', 'pages::auth.register')->name('register');
+    Route::livewire('/register-list', 'pages::auth.register-list')->name('register-list');
     Route::livewire('/register/{id}/edit', 'pages::auth.register-edit')->name('register-edit');
-    Route::livewire('/permission-matrix', 'pages::auth.permission-matrix')->middleware('auth')->name('permission-matrix');
+    Route::livewire('/permission-matrix', 'pages::auth.permission-matrix')->name('permission-matrix');
 });
 
 // Barang
@@ -33,7 +33,7 @@ Route::prefix('master')->middleware('auth')->group(function () {
     Route::livewire('/barang/{id}/edit', 'pages::master.barang-edit')->name('barang-edit');
 });
 
-// 
+//
 Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::livewire('/', 'pages::transaksi.transaksi-list')->name('transaksi-list');
     Route::livewire('/create', 'pages::transaksi.transaksi-create')->name('transaksi-create');

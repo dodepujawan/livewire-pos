@@ -45,22 +45,6 @@ class Menu extends Model
     }
 
     /**
-     * Scope untuk filter menu yang metadata-nya masih auto-generated
-     */
-    public function scopeAutoMetadata($query)
-    {
-        return $query->where('is_metadata_manual', false);
-    }
-
-    /**
-     * Scope untuk filter menu yang metadata-nya sudah di-edit manual
-     */
-    public function scopeManualMetadata($query)
-    {
-        return $query->where('is_metadata_manual', true);
-    }
-
-    /**
      * Scope untuk filter menu berdasarkan group
      */
     public function scopeByGroup($query, $group)
