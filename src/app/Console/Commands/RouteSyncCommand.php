@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\SystemRoute;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Route;
 
@@ -29,13 +30,22 @@ class RouteSyncCommand extends Command
         $routes = Route::getRoutes();
 
         foreach ($routes as $route) {
-
             if (!$route->getName()) {
                 continue;
             }
-
-            $this->line($route->getName());
-
+            SystemRoute::updateOrCreate(
+                [
+                    'route_name' => $route->getName(),
+                ],
+                [
+                    'uri'          => $route->uri(),
+                    'methods'      => implode('|', $route->methods()),
+                    'action'       => $route->getActionName(),
+                    'last_sync_at' => now(),
+                ]
+            );
         }
+        $this->info('Route synchronization completed.');
+        return self::SUCCESS;
     }
 }

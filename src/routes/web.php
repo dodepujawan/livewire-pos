@@ -14,9 +14,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.process');
 // logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // dashboard (login wajib)
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', function () {return view('dashboard.index');})->middleware('auth')->name('dashboard');
 
 // Register
 Route::prefix('auth')->middleware('auth')->group(function () {

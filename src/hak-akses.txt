@@ -191,3 +191,37 @@ Sehingga hasilnya:
 php artisan route:sync
 
 Route synchronization completed.
+
+@3
+🎯 Target Milestone 3
+
+Sebelumnya:
+
+Laravel Route
+
+↓
+
+Console
+
+Sekarang menjadi:
+
+Laravel Route
+
+↓
+
+RouteSyncCommand
+
+↓
+
+system_routes
+Step 1 - Import Model
+
+Tambahkan di atas.
+
+use App\Models\SystemRoute;
+
+Sekarang import menjadi kurang lebih:
+
+use App\Models\SystemRoute;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Route;
