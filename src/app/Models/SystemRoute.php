@@ -17,4 +17,9 @@ class SystemRoute extends Model
     protected $casts = [
         'last_sync_at' => 'datetime',
     ];
+
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
+    }
 }

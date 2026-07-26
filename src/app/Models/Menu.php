@@ -3,60 +3,46 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
-    protected $table = 'menus';
-
     protected $fillable = [
-        'route_name',
-        'permission_name',
-        'display_name',
-        'group',
+        'parent_id',
+        'system_route_id',
+        'title',
         'icon',
         'sort_order',
-        'is_metadata_manual',
-        'is_active',
-        'show_in_sidebar',
-        'parent_route_name',
+        'is_sidebar',
     ];
 
     protected $casts = [
-        'is_metadata_manual' => 'boolean',
-        'is_active' => 'boolean',
-        'show_in_sidebar' => 'boolean',
-        'sort_order' => 'integer',
+        'is_sidebar' => 'boolean',
     ];
 
     /**
-     * Scope untuk filter menu yang aktif
+     * Parent Menu
      */
-    public function scopeActive($query)
+    public function parent(): BelongsTo
     {
-        return $query->where('is_active', true);
+        return $this->belongsTo(Menu::class, 'parent_id');
     }
 
     /**
-     * Scope untuk filter menu yang ditampilkan di sidebar
+     * Child Menu
      */
-    public function scopeInSidebar($query)
+    public function children(): HasMany
     {
-        return $query->where('show_in_sidebar', true);
+        return $this->hasMany(Menu::class, 'parent_id')
+            ->orderBy('sort_order');
     }
 
     /**
-     * Scope untuk filter menu berdasarkan group
+     * Route
      */
-    public function scopeByGroup($query, $group)
+    public function systemRoute(): BelongsTo
     {
-        return $query->where('group', $group);
-    }
-
-    /**
-     * Scope untuk urutkan berdasarkan sort_order
-     */
-    public function scopeOrdered($query)
-    {
-        return $query->orderBy('sort_order')->orderBy('id');
+        return $this->belongsTo(SystemRoute::class);
     }
 }

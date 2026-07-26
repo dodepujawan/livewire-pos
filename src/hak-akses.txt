@@ -225,3 +225,37 @@ Sekarang import menjadi kurang lebih:
 use App\Models\SystemRoute;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Route;
+
+📒 Catatan Progress (yang bisa kamu simpan)
+Sprint 1 - Route Discovery ✅
+ Membuat tabel system_routes
+ Membuat model SystemRoute
+ Membuat Artisan Command route:sync
+ Mengambil seluruh Named Route Laravel
+ Menyimpan route ke tabel system_routes menggunakan updateOrCreate()
+ Berhasil membuktikan konsep Route Discovery
+Sprint 2 - Menu Foundation (Mulai) 🚧
+ Menentukan arsitektur menus
+ Mendesain relasi menus -> system_routes
+ Mendesain dukungan parent_id untuk submenu
+ Mendesain sort_order untuk urutan menu
+ Mendesain is_sidebar untuk kontrol tampilan
+ Membuat Menu Model
+ Membuat CRUD Menu
+ Membuat dropdown Route dari system_routes
+
+done Jadi aku menyatakan milestone ini
+
+✅ SELESAI
+
+Hari ini kita sudah menyelesaikan:
+
+✅ system_routes
+✅ RouteSyncCommand
+✅ Sinkronisasi route
+✅ Desain menus
+✅ Migration menus
+✅ Model Menu
+✅ Relasi Menu → SystemRoute
+✅ Relasi SystemRoute → Menu
+✅ Self Relationship (parent & children)
