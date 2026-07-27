@@ -1,0 +1,38 @@
+AUTH Framework Roadmap
+✅ Milestone 1 — Route Discovery
+Scan seluruh route Laravel
+Identifikasi route yang perlu masuk framework
+
+Status: Selesai ✅
+
+✅ Milestone 2 — Route Synchronization
+system_routes
+route:sync
+Sync route ke database
+
+Status: Selesai ✅
+
+✅ Milestone 3 — Menu Foundation
+Migration menus
+Model & Relationship
+Seeder
+Menu List (read-only)
+
+Status: Selesai ✅
+
+Di milestone ini kita juga sudah:
+
+Relasi parent
+Relasi systemRoute
+MenuSeeder
+Tampilan Menu List awal
+🚧 Milestone 4 — Menu CRUD (Sedang Dikerjakan)
+
+Target milestone ini:
+
+✅ 4.1 Menu List
+Search
+Table
+Tombol Tambah Menu
+
+Status: Hampir selesai (±90%)

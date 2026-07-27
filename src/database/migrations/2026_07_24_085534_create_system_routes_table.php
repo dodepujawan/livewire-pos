@@ -18,7 +18,7 @@ return new class extends Migration
             // URI route
             $table->string('uri');
             // GET|POST|PUT|DELETE
-            $table->string('methods');
+            $table->string('method');
             // Controller / Livewire
             $table->string('action')->nullable();
             // Waktu terakhir disinkronkan

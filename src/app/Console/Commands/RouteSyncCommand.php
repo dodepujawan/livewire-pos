@@ -39,7 +39,7 @@ class RouteSyncCommand extends Command
                 ],
                 [
                     'uri'          => $route->uri(),
-                    'methods'      => implode('|', $route->methods()),
+                    'method'      => implode('|', $route->methods()),
                     'action'       => $route->getActionName(),
                     'last_sync_at' => now(),
                 ]

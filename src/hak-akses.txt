@@ -259,3 +259,25 @@ Hari ini kita sudah menyelesaikan:
 ✅ Relasi Menu → SystemRoute
 ✅ Relasi SystemRoute → Menu
 ✅ Self Relationship (parent & children)
+
+Milestone 6 — Menu List V2
+
+Target akhirnya nanti seperti ini.
+
+Menu Management
+
++ Tambah Menu
+
+------------------------------------------------
+
+Dashboard
+
+Master
+    Barang
+
+Transaksi
+    Penjualan
+
+------------------------------------------------
+
+Edit   Delete

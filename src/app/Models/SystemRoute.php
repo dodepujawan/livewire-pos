@@ -9,7 +9,7 @@ class SystemRoute extends Model
     protected $fillable = [
         'route_name',
         'uri',
-        'methods',
+        'method',
         'action',
         'last_sync_at',
     ];
@@ -18,7 +18,7 @@ class SystemRoute extends Model
         'last_sync_at' => 'datetime',
     ];
 
-    public function menus(): HasMany
+    public function menus()
     {
         return $this->hasMany(Menu::class);
     }

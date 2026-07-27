@@ -39,3 +39,8 @@ Route::prefix('transaksi')->middleware('auth')->group(function () {
     Route::livewire('/{id}/edit', 'pages::transaksi.transaksi-edit')->name('transaksi-edit');
 });
 
+Route::prefix('menu')->middleware('auth')->group(function () {
+    Route::livewire('/master/menu','pages::master.menu-list')->name('menu-list');
+    Route::livewire('/master/menu/create', 'pages::master.menu-create')->name('menu-create');
+    Route::livewire('/master/menu/{menu}/edit', 'pages::master.menu-edit')->name('menu-edit');
+});

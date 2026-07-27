@@ -12,25 +12,32 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
+
             $table->id();
-            
-            $table->string('route_name')->unique();
-            $table->string('permission_name');
-            $table->string('display_name');
-            $table->string('group')->nullable();
+
+            $table->foreignId('parent_id')
+                ->nullable()
+                ->constrained('menus')
+                ->nullOnDelete();
+
+            $table->foreignId('system_route_id')
+                ->nullable()
+                ->constrained('system_routes')
+                ->nullOnDelete();
+
+            $table->string('title');
+
             $table->string('icon')->nullable();
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_metadata_manual')->default(false);
-            $table->boolean('is_active')->default(true);
-            $table->boolean('show_in_sidebar')->default(true);
-            $table->string('parent_route_name')->nullable();
-            
+
+            $table->unsignedInteger('sort_order')->default(0);
+
+            $table->boolean('is_sidebar')->default(true);
+
             $table->timestamps();
-            
-            $table->index('route_name');
-            $table->index('permission_name');
-            $table->index('group');
-            $table->index('is_active');
+
+            $table->index('parent_id');
+            $table->index('system_route_id');
+            $table->index('sort_order');
         });
     }
 
