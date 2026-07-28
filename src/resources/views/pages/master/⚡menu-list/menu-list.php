@@ -7,6 +7,22 @@ new class extends Component
 {
     public string $searchMenuKeyword = '';
 
+    public function delete(Menu $menu): void
+    {
+        if ($menu->children()->exists()) {
+            session()->flash(
+                'error',
+                'Menu tidak dapat dihapus karena masih memiliki submenu.'
+            );
+            return;
+        }
+        $menu->delete();
+        session()->flash(
+            'success',
+            'Menu berhasil dihapus.'
+        );
+    }
+
     public function render()
     {
         $menuData = Menu::query()

@@ -44,3 +44,5 @@ Route::prefix('menu')->middleware('auth')->group(function () {
     Route::livewire('/master/menu/create', 'pages::master.menu-create')->name('menu-create');
     Route::livewire('/master/menu/{menu}/edit', 'pages::master.menu-edit')->name('menu-edit');
 });
+
+// php artisan make:livewire pages::master.MenuEdit --mfc

@@ -1,5 +1,5 @@
 <x-form.card>
-    <x-slot:title>Create Menu</x-slot:title>
+    <x-slot:title>Edit Menu</x-slot:title>
     @if (session('success'))
         <div class="mb-5 rounded-lg bg-green-100 px-4 py-3 text-green-700">
             {{ session('success') }}
@@ -31,8 +31,8 @@
 
     <div class="flex justify-end gap-3">
         <a href="{{ route('menu-list') }}" class="rounded-lg bg-gray-200 px-4 py-2">Cancel</a>
-        <button type="button" wire:click="save" class="rounded-lg bg-blue-600 px-4 py-2 text-white">
-            Save
+        <button type="button" wire:click="update" class="rounded-lg bg-green-600 px-4 py-2 text-white">
+            Update
         </button>
     </div>
 </x-form.card>

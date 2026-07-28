@@ -1,3 +1,10 @@
+Framework v0.1 → Route Discovery + Route Sync
+Framework v0.2 → Menu Foundation
+Framework v0.3 → Menu CRUD (yang sedang kita kerjakan)
+Framework v0.4 → Dynamic Sidebar
+Framework v0.5 → Permission & Role
+Framework v1.0 → Dynamic Authorization (siap dipakai di seluruh modul)
+
 AUTH Framework Roadmap
 ✅ Milestone 1 — Route Discovery
 Scan seluruh route Laravel
@@ -30,9 +37,20 @@ Tampilan Menu List awal
 
 Target milestone ini:
 
-✅ 4.1 Menu List
-Search
-Table
-Tombol Tambah Menu
+Milestone 4
+    ✅ Menu List
+    ✅ Menu Create
+    ✅ Menu Edit
+    ✅ Menu Delete
 
-Status: Hampir selesai (±90%)
+Milestone 5
+    ⏳ Dynamic Sidebar
+
+Milestone 6
+    ⏳ Permission
+
+Milestone 7
+    ⏳ Role
+
+Milestone 8
+    ⏳ Dynamic Authorization

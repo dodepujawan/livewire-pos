@@ -30,7 +30,12 @@
                         <td class="px-4 py-3">{{ $menu->systemRoute?->route_name ?? '-' }}</td>
                         <td class="px-4 py-3 text-center">{{ $menu->sort_order }}</td>
                         <td class="px-4 py-3 text-center">{{ $menu->is_sidebar ? 'Ya' : 'Tidak' }}</td>
-                        <td class="px-4 py-3 text-center"><button type="button" class="text-blue-600 hover:underline">Edit</button></td>
+                        <td class="px-4 py-3">
+                            <div class="flex justify-center gap-2">
+                                <a href="{{ route('menu-edit', $menu) }}" wire:navigate class="rounded bg-yellow-500 px-3 py-1 text-sm text-white hover:bg-yellow-600">Edit</a>
+                                <button type="button" wire:click="delete({{ $menu->id }})" wire:confirm="Yakin ingin menghapus menu ini?" class="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700">Delete</button>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">Data menu belum tersedia.</td></tr>

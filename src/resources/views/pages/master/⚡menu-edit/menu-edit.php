@@ -6,6 +6,8 @@ use Livewire\Component;
 
 new class extends Component
 {
+    public int $menuId;
+
     public ?int $parent_id = null;
     public ?int $system_route_id = null;
     public string $title = '';
@@ -46,17 +48,28 @@ new class extends Component
         ];
     }
 
-    public function save(): void{
+    public function update(): void
+    {
         $validated = $this->validate();
-
-        Menu::create($validated);
-
+        Menu::findOrFail($this->menuId)
+            ->update($validated);
         session()->flash(
             'success',
-            'Menu berhasil ditambahkan.'
+            'Menu berhasil diperbarui.'
         );
-
         $this->redirectRoute('menu-list');
+    }
+
+    public function mount(Menu $menu): void
+    {
+        $this->menuId = $menu->id;
+
+        $this->parent_id = $menu->parent_id;
+        $this->system_route_id = $menu->system_route_id;
+        $this->title = $menu->title;
+        $this->icon = $menu->icon;
+        $this->sort_order = $menu->sort_order;
+        $this->is_sidebar = $menu->is_sidebar;
     }
 
     public function render()
@@ -66,6 +79,6 @@ new class extends Component
             'systemRoutes' => SystemRoute::orderBy('route_name')->get(),
         ])
         ->layout('layouts::app')
-        ->title('Create Menu');
+        ->title('Edit Menu');
     }
 };
