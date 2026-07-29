@@ -46,3 +46,4 @@ Route::prefix('menu')->middleware('auth')->group(function () {
 });
 
 // php artisan make:livewire pages::master.MenuEdit --mfc
+// DeepSeek-V4-Pro, DeepSeek-V4-Flash, gpt-5-mini

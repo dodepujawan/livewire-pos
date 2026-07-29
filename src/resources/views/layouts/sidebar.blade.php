@@ -27,7 +27,7 @@
         </div>
 
         <nav class="flex-1 overflow-y-auto p-4 space-y-2 text-sm">
-            @livewire('pages::sidebar')
+            @livewire('components::sidebar')
         </nav>
 
     </div>

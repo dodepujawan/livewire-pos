@@ -1,56 +1,92 @@
-Framework v0.1 → Route Discovery + Route Sync
-Framework v0.2 → Menu Foundation
-Framework v0.3 → Menu CRUD (yang sedang kita kerjakan)
-Framework v0.4 → Dynamic Sidebar
-Framework v0.5 → Permission & Role
-Framework v1.0 → Dynamic Authorization (siap dipakai di seluruh modul)
+✅ Milestone 1 — Foundation (100%)
+✅ Laravel 12
+✅ Livewire 4 MFC
+✅ Route Discovery
+✅ Route Synchronization
+✅ Database AUTH
 
-AUTH Framework Roadmap
-✅ Milestone 1 — Route Discovery
-Scan seluruh route Laravel
-Identifikasi route yang perlu masuk framework
+✅ Milestone 2 — Menu Management (100%)
+✅ Menu CRUD
+✅ Parent Menu
+✅ Child Menu
+✅ Sort Order
+✅ Sidebar Flag
 
-Status: Selesai ✅
+✅ Milestone 3 — Dynamic Sidebar Engine (100%)
+✅ Database Driven Sidebar
+✅ Parent Child
+✅ Expand / Collapse
+✅ Livewire State
 
-✅ Milestone 2 — Route Synchronization
-system_routes
-route:sync
-Sync route ke database
+Ini milestone yang baru saja kita selesaikan. 🎉
 
-Status: Selesai ✅
+🟡 Milestone 4 — Professional UI
+Ini yang mulai besok kita kerjakan.
+⬜ Sidebar Design
+⬜ Active Menu
+⬜ Active Parent
+⬜ Icon Database
+⬜ Hover
+⬜ Transition
+⬜ Mobile
+⬜ Desktop
+⬜ Breadcrumb
+⬜ Topbar
+⬜ User Profile
+⬜ Logout
 
-✅ Milestone 3 — Menu Foundation
-Migration menus
-Model & Relationship
-Seeder
-Menu List (read-only)
+Ini sudah mulai masuk ke UX.
 
-Status: Selesai ✅
+🟡 Milestone 5 — Permission Engine
+Menurutku ini milestone paling besar.
+⬜ Permission CRUD
+⬜ Generate Permission
+⬜ Assign Permission
+⬜ Sidebar Filter
+⬜ Route Filter
+⬜ Livewire Filter
+⬜ Blade Directive
 
-Di milestone ini kita juga sudah:
+🟡 Milestone 6 — Role Engine
+⬜ Role CRUD
+⬜ Assign Permission
+⬜ Assign User
+⬜ Role Middleware
+⬜ Seeder
 
-Relasi parent
-Relasi systemRoute
-MenuSeeder
-Tampilan Menu List awal
-🚧 Milestone 4 — Menu CRUD (Sedang Dikerjakan)
+🟡 Milestone 7 — Dynamic Authorization
+Ini yang membuat framework terasa "hidup".
+⬜ Auto Hide Menu
+⬜ Auto Protect Route
+⬜ Auto Protect Livewire
+⬜ Dynamic Middleware
+⬜ Policy
+⬜ Gate
 
-Target milestone ini:
+🟢 Milestone 8 — Framework Polish
+⬜ Loading
+⬜ Notification
+⬜ Toast
+⬜ Confirm Delete
+⬜ Skeleton
+⬜ Empty State
+⬜ Error State
+⬜ Global Modal
 
-Milestone 4
-    ✅ Menu List
-    ✅ Menu Create
-    ✅ Menu Edit
-    ✅ Menu Delete
+🟢 Milestone 9 — Developer Experience
 
-Milestone 5
-    ⏳ Dynamic Sidebar
+Supaya nanti kalau bikin modul tinggal 5 menit.
+⬜ make:crud
+⬜ make:page
+⬜ make:master
+⬜ make:transaction
+⬜ Generator
+⬜ Stub
+Ini yang menurutku akan menghemat waktu kita paling banyak untuk modul-modul berikutnya seperti Barang, Customer, Supplier, dll.
 
-Milestone 6
-    ⏳ Permission
-
-Milestone 7
-    ⏳ Role
-
-Milestone 8
-    ⏳ Dynamic Authorization
+🟢 Milestone 10 — Release v1.0
+⬜ Testing
+⬜ Documentation
+⬜ GitHub
+⬜ Versioning
+⬜ Release
