@@ -39,39 +39,49 @@ Ini sudah mulai masuk ke UX.
 
 🟡 Milestone 5 — Permission Engine
 Menurutku ini milestone paling besar.
+⬜ Display Name pada System Route
+⬜ Auto Fill Title
+⬜ Validasi Route Unik
+⬜ Validasi Menu
+⬜ Route Sync Improvement
+⬜ Rule Satu Route = Satu Menu
+
+🟡 Milestone 6 — Role Engine
 ⬜ Permission CRUD
-⬜ Generate Permission
-⬜ Assign Permission
+
+⬜ Generate Route Permission
+   barang.view
+   barang.create
+
+⬜ Generate Action Permission
+   barang.update
+   barang.delete
+   barang.print
+   barang.export
+
+⬜ Permission Sync
+
+⬜ Permission Seeder
+
+🟡 Milestone 7 — Dynamic Authorization
+⬜ Role CRUD
+⬜ Assign Permission to Role ⭐
+⬜ Assign Role to User ⭐
+⬜ Role Middleware
+⬜ Super Admin
+⬜ Seeder
+
+🟢 Milestone 8 — Framework Polish
+⬜ Auto Hide Menu
 ⬜ Sidebar Filter
 ⬜ Route Filter
 ⬜ Livewire Filter
-⬜ Blade Directive
-
-🟡 Milestone 6 — Role Engine
-⬜ Role CRUD
-⬜ Assign Permission
-⬜ Assign User
-⬜ Role Middleware
-⬜ Seeder
-
-🟡 Milestone 7 — Dynamic Authorization
-Ini yang membuat framework terasa "hidup".
-⬜ Auto Hide Menu
 ⬜ Auto Protect Route
 ⬜ Auto Protect Livewire
 ⬜ Dynamic Middleware
+⬜ Blade Directive
 ⬜ Policy
 ⬜ Gate
-
-🟢 Milestone 8 — Framework Polish
-⬜ Loading
-⬜ Notification
-⬜ Toast
-⬜ Confirm Delete
-⬜ Skeleton
-⬜ Empty State
-⬜ Error State
-⬜ Global Modal
 
 🟢 Milestone 9 — Developer Experience
 
