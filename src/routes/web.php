@@ -47,8 +47,6 @@ Route::prefix('menu')->middleware('auth')->group(function () {
 
 Route::prefix('system')->name('system.')->group(function () {
     Route::livewire('/roles', 'pages::system.role-list')->name('role.list');
-    Route::livewire('/roles/create', 'pages::system.role-create')->name('role.create');
-    Route::livewire('/roles/{role}/edit', 'pages::system.role-edit')->name('role.edit');
 });
 
 Route::prefix('system')
@@ -61,6 +59,11 @@ Route::prefix('system')
 // gpt-5.6-luna, gpt-5.6-terra, gpt-5.6-sol, gpt-5-mini, grok-4.3, DeepSeek-V4-Pro, DeepSeek-V4-Flash
 // php artisan route:sync
 // php artisan framework:permission-sync
+// memakai permisison scanner
+// protected array $additionalPermissions = [
+//     'system.role.delete',
+//     'system.role.assign',
+// ];
 // php artisan make:model Permission -m
 // | Action    | Arti                  |
 // | --------- | --------------------- |

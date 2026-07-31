@@ -1,107 +1,197 @@
-<x-form.select
-    label="Role"
-    name="selectedRoleId"
-    wire:model.live="selectedRoleId"
->
+<div>
+    @if (session()->has('success'))
+        <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    @foreach($roles as $role)
+    @if (session()->has('error'))
+        <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {{ session('error') }}
+        </div>
+    @endif
 
-        <option
-            value="{{ $role->id }}"
-        >
-            {{ $role->name }}
-        </option>
-
-    @endforeach
-
-</x-form.select>
-<table class="min-w-full">
-
-    <thead>
-
-        <tr>
-
-            <th>Menu</th>
-
-            <th>View</th>
-
-            <th>Create</th>
-
-            <th>Update</th>
-
-            <th>Delete</th>
-
-            <th>Print</th>
-
-            <th>Export</th>
-
-        </tr>
-
-    </thead>
-
-    <tbody>
-
-    @foreach($permissionMatrix as $resource)
-
-        <tr>
-
-            <td>
-
-                <div class="font-medium">
-
-                    {{ $resource['label'] }}
-
+    <x-form.card>
+        {{-- Header --}}
+        <div class="mb-6 flex items-end justify-between">
+            <div class="flex items-end gap-3">
+                <div class="w-80">
+                    <x-form.select
+                        label="Role"
+                        name="selectedRoleId"
+                        wire:model.live="selectedRoleId"
+                    >
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                        @endforeach
+                    </x-form.select>
                 </div>
+                <button
+                    type="button"
+                    wire:click="openRenameRoleModal"
+                    class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-300 bg-white text-lg hover:bg-gray-50"
+                >
+                    ✏️
+                </button>
+                <button
+                    type="button"
+                    wire:click="openDeleteRoleModal"
+                    class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-red-300 bg-white text-lg text-red-600 hover:bg-red-50"
+                >
+                    🗑️
+                </button>
+            </div>
+            <div class="mb-5 flex items-center gap-2">
+                <button
+                    type="button"
+                    wire:click="openCreateRoleModal"
+                    class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50"
+                >
+                    + Role
+                </button>
+                <button
+                    type="button"
+                    wire:click="save"
+                    class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700"
+                >
+                    Simpan
+                </button>
+            </div>
+        </div>
 
-                <div class="text-xs text-gray-400">
+        {{-- Toolbar --}}
+        <div class="mb-4 flex items-center gap-2">
+            <button wire:click="selectAll" class="rounded border px-3 py-2 text-sm hover:bg-gray-50">
+                ☑ Pilih Semua
+            </button>
+            <button wire:click="clearAll" class="rounded border px-3 py-2 text-sm hover:bg-gray-50">
+                ☐ Kosongkan
+            </button>
+        </div>
+        <div class="mb-4">
+            <x-form.input label="Cari Permission" name="search" wire:model.live.debounce.300ms="search" />
+        </div>
 
-                    {{ $resource['resource'] }}
-
+        {{-- Table --}}
+        <div class="overflow-hidden rounded-xl border border-gray-200">
+            <div class="max-h-[70vh] overflow-y-auto">
+                <table class="w-full table-fixed">
+                    <thead class="sticky top-0 z-20 bg-gray-100 shadow-sm">
+                        <tr>
+                            <th class="w-[38%] px-6 py-4 text-left text-sm font-semibold uppercase">Menu</th>
+                            @foreach (['View','Create','Update','Delete','Print','Export'] as $action)
+                                <th class="w-[10%] px-2 py-4 text-center text-sm font-semibold uppercase">{{ $action }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($this->filteredPermissionMatrix as $resource)
+                            <tr class="transition hover:bg-blue-50">
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-900">{{ $resource['label'] }}</div>
+                                    <div class="mt-1 text-sm text-gray-400">{{ $resource['resource'] }}</div>
+                                </td>
+                                @foreach(['view','create','update','delete','print','export'] as $action)
+                                    <td class="text-center align-middle">
+                                        @if(isset($resource['actions'][$action]))
+                                            <input
+                                                type="checkbox"
+                                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                wire:model="selectedPermissions"
+                                                value="{{ $resource['actions'][$action] }}"
+                                            >
+                                        @endif
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-10 text-center text-gray-500">
+                                    Tidak ada permission.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </x-form.card>
+    {{-- Create Role Modal --}}
+    @if ($showCreateRoleModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            wire:click.self="$set('showCreateRoleModal', false)">
+            <form wire:submit="createRole" class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                <h2 class="text-lg font-semibold">Tambah Role</h2>
+                <div class="mt-4">
+                    <label class="mb-2 block text-sm font-medium">Nama Role</label>
+                    <input type="text" wire:model.defer="newRoleName"
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+                        autofocus>
+                    @error('newRoleName')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
+                <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" wire:click="$set('showCreateRoleModal', false)"
+                        class="rounded-lg border border-gray-300 px-4 py-2">
+                        Batal
+                    </button>
+                    <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    @endif
 
-            </td>
+    {{-- Rename Role Modal --}}
+    @if ($showRenameRoleModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            wire:click.self="$set('showRenameRoleModal', false)">
+            <form wire:submit="renameRole" class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                <h2 class="text-lg font-semibold">Rename Role</h2>
+                <div class="mt-4">
+                    <label class="mb-2 block text-sm font-medium">Nama Role</label>
+                    <input type="text" wire:model.defer="roleName"
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none">
+                    @error('roleName')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" wire:click="$set('showRenameRoleModal', false)"
+                        class="rounded-lg border border-gray-300 px-4 py-2">
+                        Batal
+                    </button>
+                    <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    @endif
 
-            @foreach([
-                'view',
-                'create',
-                'update',
-                'delete',
-                'print',
-                'export'
-            ] as $action)
-
-                <td class="text-center">
-
-                    @if(isset($resource['actions'][$action]))
-
-                        <input
-                            type="checkbox"
-                            wire:model="selectedPermissions"
-                            value="{{ $resource['actions'][$action] }}"
-                        >
-
-                    @endif
-
-                </td>
-
-            @endforeach
-
-        </tr>
-
-    @endforeach
-
-    </tbody>
-
-</table>
-<div class="mt-6 flex justify-end">
-
-    <button
-        wire:click="save"
-        class="rounded-lg bg-blue-600 px-5 py-2 text-white"
-    >
-
-        Simpan Permission
-
-    </button>
-
+    {{-- Delete Role Modal --}}
+    @if ($showDeleteRoleModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+            wire:click.self="$set('showDeleteRoleModal', false)">
+            <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-red-600">Hapus Role</h2>
+                <p class="mt-3 text-sm text-gray-600">
+                    Role ini akan dihapus secara permanen. Apakah Anda yakin?
+                </p>
+                <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" wire:click="$set('showDeleteRoleModal', false)"
+                        class="rounded-lg border border-gray-300 px-4 py-2">
+                        Batal
+                    </button>
+                    <button type="button" wire:click="deleteRole"
+                        class="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+                        Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+    <x-form.loading wire:target="save, createRole, renameRole, deleteRole"/>
 </div>

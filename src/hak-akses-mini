@@ -1,140 +1,181 @@
 🚀 Roadmap POS SPA Framework
 ✅ Milestone 1 — Foundation (100%)
 ✅ Laravel 12
-✅ Livewire 4 MFC
+✅ Livewire 4 MFC Architecture
+✅ Database Authentication
 ✅ Route Discovery
 ✅ Route Synchronization
-✅ Database AUTH
-✅ Milestone 2 — Menu Management (100%)
+✅ System Route Table
+✅ Display Name Generator
+✅ Route Validation
+✅ One Route = One System Route
+✅ Milestone 2 — Dynamic Menu Management (95%)
 ✅ Menu CRUD
 ✅ Parent Menu
 ✅ Child Menu
 ✅ Sort Order
 ✅ Sidebar Flag
+✅ Route Relation
+✅ Icon Database
+
+Remaining
+
+⬜ Editable Menu Title (menus.title) terintegrasi penuh dengan Sidebar
+⬜ Menu Preview setelah edit
 ✅ Milestone 3 — Dynamic Sidebar Engine (100%)
 ✅ Database Driven Sidebar
 ✅ Parent / Child
 ✅ Expand / Collapse
-✅ Livewire State
-🟡 Milestone 4 — Professional UI
-☑ Sidebar Design
-☑ Active Menu
-☑ Active Parent
-☑ Icon Database
-☑ Hover
-☑ Transition
-⬜ Mobile Sidebar
-⬜ Desktop Polish
+✅ Active Parent
+✅ Active Child
+✅ Sort Order
+✅ Icon Support
+✅ Livewire Navigate Ready
+🟡 Milestone 4 — UI Foundation (85%)
+✅ Sidebar UI
+✅ Hover Effect
+✅ Transition
+✅ Active Menu
+✅ Active Parent
+
+Remaining
+
 ⬜ Breadcrumb
 ⬜ Topbar
 ⬜ User Profile
-⬜ Logout
-
-Status: Hampir selesai (±85–90%)
-
-🟢 Milestone 5 — Route Foundation (100%)
-
+⬜ Logout Dropdown
+⬜ Mobile Sidebar
+⬜ Desktop Polish
+✅ Milestone 5 — Route Foundation (100%)
 ✅ Route Discovery
 ✅ Route Synchronization
-✅ Display Name Generator
 ✅ Route Filtering
-✅ Route Validation
-✅ One Route = One Menu
-
-🟡 Milestone 6 — Permission Engine (20%)
-
-✅ Permission Synchronization (Spatie)
-✅ Action Mapping
-    list → view
-    edit → update
-    show → view
-
-⬜ Permission CRUD
-⬜ Permission Matrix
-⬜ Permission Seeder
+✅ Display Name Generator
+✅ Dynamic Menu Source
+🟡 Milestone 6 — Permission Engine (65%)
+Done
+✅ Spatie Permission
+✅ Route → Permission Mapping
+list   → view
+show   → view
+create → create
+edit   → update
+✅ Permission Synchronization
+✅ Permission Matrix
+✅ Permission Save
+✅ Role Permission Sync
+✅ Select All
+✅ Clear All
+In Progress
+⬜ Additional Permission Scanner ($additionalPermissions)
+⬜ Livewire Component Scanner
+⬜ Controller Scanner
+⬜ Merge Route Permission + Additional Permission
+⬜ Auto Remove Unused Permission
+Remaining
 ⬜ Permission Cache
-
-🟡 Milestone 7 — Role Engine
-⬜ Role CRUD
-⬜ Assign Permission to Role
+⬜ Permission Seeder
+🟡 Milestone 7 — Role Engine (70%)
+Done
+✅ Role List
+✅ Create Role
+✅ Rename Role
+✅ Delete Role
+✅ Assign Permission
+✅ Save Permission
+✅ Protect Super Admin
+Remaining
 ⬜ Assign Role to User
-⬜ Role Middleware
-⬜ Super Admin
-⬜ Seeder
-🟢 Milestone 8 — Dynamic Authorization
-⬜ Auto Hide Menu
-⬜ Sidebar Filter
-⬜ Route Filter
-⬜ Livewire Filter
-⬜ Auto Protect Route
-⬜ Auto Protect Livewire
-⬜ Dynamic Middleware
-⬜ Blade Directive
-⬜ Policy
-⬜ Gate
-🟢 Milestone 9 — Developer Experience
+⬜ Role Seeder
+🟡 Milestone 8 — Dynamic Authorization (10%)
 
-Supaya membuat modul baru tinggal beberapa menit.
+Remaining
 
-⬜ make:crud
-⬜ make:page
+⬜ Sidebar Permission Filter
+⬜ Route Middleware
+⬜ Livewire Permission Guard
+⬜ Controller Permission Guard
+⬜ Blade Helper
+⬜ Permission Helper
+⬜ Milestone 9 — Developer Experience
+
+Framework Generator
+
 ⬜ make:master
 ⬜ make:transaction
-⬜ Generator
-⬜ Stub
-🟢 Milestone 10 — Release v1.0
+⬜ make:page
+⬜ CRUD Generator
+⬜ Stub Generator
+⬜ Milestone 10 — Release v1
 ⬜ Testing
 ⬜ Documentation
-⬜ GitHub
 ⬜ Versioning
-⬜ Release
-🔵 Milestone 11 — Deployment Automation
-⬜ Auto Seeder VPS
+⬜ GitHub Release
+⬜ Milestone 11 — Deployment
 ⬜ Auto Route Sync
 ⬜ Auto Permission Sync
+⬜ Seeder Automation
 ⬜ Initial Setup Wizard
-🎨 Extra UI Enhancement (Future)
-
-Tidak mempengaruhi arsitektur.
-
-⬜ UI Theme v2
-⬜ Dark Sidebar
-⬜ Glass Effect
-⬜ Smooth Animation
-⬜ Overlay
-⬜ Mobile Drawer
-⬜ SPA (wire:navigate)
-⬜ Ripple Hover
-⬜ Badge Notification
-📘 Framework Decision Record (FDR)
-FDR-001 — Menu & Route Rules
-✅ system_routes menyimpan daftar seluruh halaman aplikasi.
+📘 Framework Decision Record (LOCK)
+FDR-001 — Route Rules
+✅ Route bebas jumlah segmen.
+✅ Segmen terakhir adalah Page Action (list, show, create, edit, dll).
+✅ Semua segmen sebelumnya dianggap Resource.
+✅ Route hanya merepresentasikan Page, bukan Action bisnis.
+FDR-002 — Menu Rules
+✅ system_routes menyimpan seluruh halaman aplikasi.
 ✅ display_name adalah nama default halaman.
-✅ menus.title adalah nama yang tampil di sidebar dan boleh diubah oleh Admin.
-✅ Parent Menu boleh mempunyai Route atau tidak mempunyai Route.
-✅ Child Menu wajib mempunyai Route.
+✅ menus.title adalah nama Sidebar yang dapat diubah Admin.
+✅ Parent Menu boleh memiliki Route atau tidak.
+✅ Child Menu wajib memiliki Route.
 ✅ Satu system_route hanya boleh dipakai oleh satu Menu.
+FDR-003 — Permission Rules
+
+Permission dasar berasal dari Route.
+
+list   → view
+show   → view
+create → create
+edit   → update
+
+Permission tambahan berasal dari:
+
+protected array $additionalPermissions = [];
+
+Framework akan melakukan:
+
+Route
+        ↓
+Permission Mapping
+
++
+
+additionalPermissions
+
+↓
+
+Merge
+
+↓
+
+Spatie Permission
+FDR-004 — Scanner Rules
+
+Permission Scanner hanya melakukan scan terhadap handler yang digunakan Route.
+
+Didukung:
+
+✅ Livewire MFC Component
+✅ Laravel Controller
+
+Framework tidak melakukan scan seluruh project, sehingga proses sync tetap cepat dan hanya membaca file yang benar-benar digunakan.
+
 📌 Framework Principle
 
-Sebelum menambah fitur baru, selalu tanyakan:
+Sebelum menambah fitur framework, selalu tanyakan:
 
-Apakah fitur ini memang dibutuhkan?
-Apakah ada cara yang lebih sederhana?
-Apakah scalable?
+Apakah fitur ini benar-benar dibutuhkan?
+Apakah ada solusi yang lebih sederhana?
+Apakah tetap scalable?
 Apakah mudah di-maintain?
-Kalau client minta perubahan 2 tahun lagi, apakah kita harus membongkar arsitektur?
-Review dari aku
-
-Aku ingin mengomentari satu hal yang menurutku sangat positif.
-
-Roadmap ini sekarang tidak lagi berisi daftar fitur, tetapi sudah mulai menjadi peta pembangunan framework.
-
-Contohnya:
-
-Milestone 1–3 = membangun fondasi.
-Milestone 4 = membuat framework nyaman dipakai.
-Milestone 5–8 = membuat framework pintar (permission, role, authorization).
-Milestone 9 = membuat developer cepat bekerja.
-Milestone 10–11 = membuat framework siap dipakai di dunia nyata.
-
-Menurutku urutan ini jauh lebih masuk akal daripada langsung mengejar fitur bisnis satu per satu.
+Apakah perubahan 2 tahun lagi bisa dilakukan tanpa membongkar arsitektur?
