@@ -8,6 +8,7 @@
 
     @livewireStyles
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100">
@@ -34,5 +35,6 @@
 
 @livewireScriptConfig
 {{-- @livewireScripts --}}
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 </html>

@@ -3,7 +3,6 @@
 use App\Models\Menu;
 use App\Models\SystemRoute;
 use Livewire\Component;
-use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -14,6 +13,11 @@ new class extends Component
     public int $sort_order = 1;
     public bool $is_sidebar = true;
     public bool $titleCustomized = false;
+    public bool $showRootMenuModal = false;
+    public string $rootTitle = '';
+    public ?string $rootIcon = null;
+    public int $rootSortOrder = 0;
+    public bool $rootIsSidebar = true;
 
     protected function rules(): array
     {
@@ -83,10 +87,54 @@ new class extends Component
         $this->redirectRoute('menu-list');
     }
 
+    public function openRootMenuModal(): void
+    {
+        $this->reset([
+            'rootTitle',
+            'rootIcon',
+        ]);
+
+        $this->rootSortOrder = 0;
+        $this->rootIsSidebar = true;
+
+        $this->showRootMenuModal = true;
+    }
+
+    public function saveRootMenu(): void
+    {
+        $this->validate([
+            'rootTitle' => 'required|max:100',
+            'rootIcon' => 'nullable|max:100',
+            'rootSortOrder' => 'required|integer',
+        ]);
+
+        $menu = Menu::create([
+            'parent_id'       => null,
+            'system_route_id' => null,
+            'title'           => $this->rootTitle,
+            'icon'            => $this->rootIcon,
+            'sort_order'      => $this->rootSortOrder,
+            'is_sidebar'      => $this->rootIsSidebar,
+        ]);
+
+        $this->parent_id = $menu->id;
+
+        $this->showRootMenuModal = false;
+
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Root menu created successfully.',
+        ]);
+    }
+
     public function render()
     {
         return $this->view([
-            'parentMenus' => Menu::orderBy('title')->get(),
+            'parentMenus' => Menu::query()
+            ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get(),
             'systemRoutes' => SystemRoute::orderBy('route_name')->get(),
         ])
         ->layout('layouts::app')
