@@ -5,7 +5,7 @@
             <h1 class="text-2xl font-bold">Master Barang</h1>
             <p class="text-sm text-gray-500">Daftar barang dan stok.</p>
         </div>
-        <a href="{{ route('barang-create') }}" wire:navigate class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">+ Tambah Barang</a>
+        <a href="{{ route('master.barang.create') }}" wire:navigate class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">+ Tambah Barang</a>
     </div>
 
     {{-- Filter --}}

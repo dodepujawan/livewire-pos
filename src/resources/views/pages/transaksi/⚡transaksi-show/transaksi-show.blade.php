@@ -6,10 +6,10 @@
             <p class="text-sm text-gray-500">Detail transaksi penjualan barang.</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('transaksi-edit', ['id' => $transaksiId]) }}" wire:navigate class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <a href="{{ route('transaksi.penjualan.edit', ['id' => $transaksiId]) }}" wire:navigate class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Edit
             </a>
-            <a href="{{ route('transaksi-list') }}" wire:navigate class="px-4 py-2 border rounded-lg hover:bg-gray-50">Kembali</a>
+            <a href="{{ route('transaksi.penjualan.list') }}" wire:navigate class="px-4 py-2 border rounded-lg hover:bg-gray-50">Kembali</a>
         </div>
     </div>
 

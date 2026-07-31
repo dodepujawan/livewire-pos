@@ -71,7 +71,7 @@
         </div>
 
         <div class="flex justify-end gap-3">
-            <a href="{{ route('menu-list') }}" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+            <a href="{{ route('master.menu.list') }}" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                 Cancel
             </a>
             <button type="button" wire:click="update" class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">

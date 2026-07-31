@@ -60,7 +60,7 @@
             </div>
         </div>
         <div class="flex gap-3 mt-6">
-            <a href="{{ route('barang-list') }}" wire:navigate class="px-4 py-2 border rounded-lg">Kembali</a>
+            <a href="{{ route('master.barang.list') }}" wire:navigate class="px-4 py-2 border rounded-lg">Kembali</a>
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">Simpan Barang</button>
         </div>
     </form>

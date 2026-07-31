@@ -3,22 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SystemRoute extends Model
 {
     protected $fillable = [
         'route_name',
-        'uri',
-        'method',
-        'action',
-        'last_sync_at',
+        'display_name',
     ];
 
-    protected $casts = [
-        'last_sync_at' => 'datetime',
-    ];
-
-    public function menus()
+    /**
+     * Menus associated with this system route
+     *
+     * @return HasMany
+     */
+    public function menus(): HasMany
     {
         return $this->hasMany(Menu::class);
     }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\SystemRoute;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class RouteSyncCommand extends Command
 {
@@ -28,24 +29,84 @@ class RouteSyncCommand extends Command
     public function handle()
     {
         $routes = Route::getRoutes();
-
+        $syncedRoutes = [];
+        $stats = [
+            'created' => 0,
+            'updated' => 0,
+        ];
         foreach ($routes as $route) {
-            if (!$route->getName()) {
+            $routeName = $route->getName();
+            if (!$routeName) {
                 continue;
             }
-            SystemRoute::updateOrCreate(
-                [
-                    'route_name' => $route->getName(),
-                ],
-                [
-                    'uri'          => $route->uri(),
-                    'method'      => implode('|', $route->methods()),
-                    'action'       => $route->getActionName(),
-                    'last_sync_at' => now(),
-                ]
-            );
+            if (!$this->shouldSyncRoute($routeName)) {
+                continue;
+            }
+            $syncedRoutes[] = $routeName;
+            $status = $this->syncRoute($routeName);
+            $stats[$status]++;
         }
-        $this->info('Route synchronization completed.');
+        $this->deleteMissingRoutes($syncedRoutes);
+        $this->newLine();
+        $this->info('Route Synchronization Completed');
+        $this->line("Created : {$stats['created']}");
+        $this->line("Updated : {$stats['updated']}");
         return self::SUCCESS;
+    }
+
+    private function syncRoute(string $routeName): string
+    {
+        $route = SystemRoute::firstOrNew([
+            'route_name' => $routeName,
+        ]);
+        $isNew = !$route->exists;
+
+        $displayName = $this->generateDisplayName($routeName);
+        if ($route->display_name !== $displayName) {
+            $route->display_name = $displayName;
+        }
+        $route->save();
+        return $isNew ? 'created' : 'updated';
+    }
+
+    private function deleteMissingRoutes(array $syncedRoutes): void
+    {
+        if (empty($syncedRoutes)) {
+            return;
+        }
+        SystemRoute::whereNotIn('route_name', $syncedRoutes)->delete();
+    }
+
+    /**
+    * Determine whether the route should be synchronized.
+    */
+    private function shouldSyncRoute(string $routeName): bool
+    {
+        $ignoredPrefixes = [
+            'livewire.',
+            'ignition.',
+            'debugbar.',
+            'sanctum.',
+        ];
+
+        foreach ($ignoredPrefixes as $prefix) {
+            if (Str::startsWith($routeName, $prefix)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Generate display name from route name.
+     */
+    private function generateDisplayName(string $routeName): string
+    {
+        return Str::of($routeName)
+            ->replace('.', ' ')
+            ->replace('-', ' ')
+            ->title()
+            ->toString();
     }
 }

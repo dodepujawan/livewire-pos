@@ -32,7 +32,7 @@ new class extends Component
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-bold text-gray-800">User List</h1>
 
-        <a href="{{ route('register') }}" wire:navigate
+        <a href="{{ route('auth.register.create') }}" wire:navigate
            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm shadow">
             + Add User
         </a>
@@ -76,7 +76,7 @@ new class extends Component
                         <td class="px-4 py-3 text-center space-x-2">
 
                             <!-- EDIT -->
-                            <a href="{{ route('register-edit', $user->id) }}"
+                            <a href="{{ route('auth.register.edit', $user->id) }}"
                                wire:navigate
                                class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
                                 Edit

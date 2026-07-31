@@ -154,7 +154,7 @@ new class extends Component
 
         <!-- ACTION -->
         <div class="flex justify-between pt-2 mt-2">
-            <a href="{{ route('register-list') }}" wire:navigate class="text-gray-600 hover:underline">
+            <a href="{{ route('auth.register.list') }}" wire:navigate class="text-gray-600 hover:underline">
                 ← Kembali
             </a>
 

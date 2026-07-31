@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-semibold">
             Menu Management
         </h1>
-        <a href="{{ route('menu-create') }}" wire:navigate class="rounded-lg bg-blue-600 px-4 py-2 text-white">
+        <a href="{{ route('master.menu.create') }}" wire:navigate class="rounded-lg bg-blue-600 px-4 py-2 text-white">
             Tambah Menu
         </a>
     </div>

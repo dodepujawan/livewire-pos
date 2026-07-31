@@ -9,24 +9,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('menus', function (Blueprint $table) {
+
             $table->id();
-            // Parent Menu (nullable = menu utama)
+            // Parent Menu
             $table->foreignId('parent_id')
                 ->nullable()
                 ->constrained('menus')
-                ->nullOnDelete();
-            // Route yang dipilih
+                ->restrictOnDelete();
+            // Route Menu
             $table->foreignId('system_route_id')
                 ->nullable()
+                ->unique()
                 ->constrained('system_routes')
-                ->nullOnDelete();
-            // Nama menu
+                ->restrictOnDelete();
+            // Judul Menu
             $table->string('title');
             // Icon
             $table->string('icon')->nullable();
-            // Urutan menu
+            // Urutan
             $table->unsignedInteger('sort_order')->default(0);
-            // Tampil di Sidebar?
+            // Sidebar
             $table->boolean('is_sidebar')->default(true);
             $table->timestamps();
         });

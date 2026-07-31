@@ -13,16 +13,10 @@ return new class extends Migration
     {
         Schema::create('system_routes', function (Blueprint $table) {
             $table->id();
-            // Nama route Laravel
+            // Nama Route Laravel
             $table->string('route_name')->unique();
-            // URI route
-            $table->string('uri');
-            // GET|POST|PUT|DELETE
-            $table->string('method');
-            // Controller / Livewire
-            $table->string('action')->nullable();
-            // Waktu terakhir disinkronkan
-            $table->timestamp('last_sync_at')->nullable();
+            // Nama baku halaman
+            $table->string('display_name');
             $table->timestamps();
         });
     }

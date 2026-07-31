@@ -4,7 +4,7 @@
         <div>
             <h1 class="text-lg font-bold">Edit Transaksi</h1>
         </div>
-        <a href="{{ route('transaksi-list') }}" wire:navigate class="px-3 py-1.5 border rounded hover:bg-gray-50 text-sm mr-1 mt-1">Kembali</a>
+        <a href="{{ route('transaksi.penjualan.list') }}" wire:navigate class="px-3 py-1.5 border rounded hover:bg-gray-50 text-sm mr-1 mt-1">Kembali</a>
     </div>
 
     @if (session('success'))
@@ -22,7 +22,7 @@
     <form wire:submit.prevent="saveTransaksi" class="h-[calc(100vh-60px)]">
         {{-- Main Grid Layout --}}
         <div class="grid gap-2 h-full min-h-0" style="grid-template-columns: 300px minmax(0,1fr) 300px;">
-            
+
             {{-- Left Column: Header & Add Item (fixed 300px) --}}
             <div class="flex flex-col gap-2 min-h-0 overflow-y-auto pr-1">
                 {{-- Header Section --}}
@@ -64,12 +64,12 @@
                         {{-- Kode Barang --}}
                         <div>
                             <label class="block text-sm font-medium mb-1">Kode Barang</label>
-                            <input 
-                                type="text" 
-                                wire:model.live="itemKodeBarang" 
+                            <input
+                                type="text"
+                                wire:model.live="itemKodeBarang"
                                 wire:keydown.enter.prevent="searchBarang"
                                 id="kode-barang-input"
-                                class="w-full border rounded px-3 py-1.5 text-sm" 
+                                class="w-full border rounded px-3 py-1.5 text-sm"
                                 placeholder="Scan/ketik kode..."
                             >
                             @error('itemKodeBarang')
@@ -89,12 +89,12 @@
                             {{-- Qty --}}
                             <div>
                                 <label class="block text-sm font-medium mb-1">Qty</label>
-                                <input 
-                                    type="number" 
-                                    wire:model.live.debounce.500ms="itemQty" 
+                                <input
+                                    type="number"
+                                    wire:model.live.debounce.500ms="itemQty"
                                     wire:keydown.enter.prevent="addToCart"
                                     id="qty-input"
-                                    min="1" 
+                                    min="1"
                                     class="w-full border rounded px-3 py-1.5 text-sm"
                                     @if(!$itemNamaBarang) disabled @endif
                                 >
@@ -148,7 +148,7 @@
             {{-- Middle Column: Cart (flexible width) --}}
             <div class="bg-white rounded shadow p-2 min-h-0 overflow-hidden flex flex-col">
                 <h3 class="font-semibold mb-2 text-xs shrink-0">Keranjang Belanja</h3>
-                
+
                 @if(count($cartItems) > 0)
                     <div class="max-h-[60vh] overflow-y-auto">
                         <table class="w-full text-xs" style="table-layout: fixed;">
@@ -181,19 +181,19 @@
                                         <td class="px-2 py-1.5 text-xs">{{ $item['nama_barang'] }}</td>
                                         <td class="px-2 py-1.5 text-xs">{{ $item['nama_satuan'] }}</td>
                                         <td class="px-2 py-1.5 text-right text-xs">
-                                            <input 
-                                                type="number" 
-                                                wire:model.live.debounce.300ms="cartItems.{{ $index }}.qty" 
-                                                min="1" 
+                                            <input
+                                                type="number"
+                                                wire:model.live.debounce.300ms="cartItems.{{ $index }}.qty"
+                                                min="1"
                                                 class="w-full text-right border rounded px-1 py-0.5 text-xs"
                                             >
                                         </td>
                                         <td class="px-2 py-1.5 text-right text-xs">{{ number_format($item['harga'], 0, ',', '.') }}</td>
                                         <td class="px-2 py-1.5 text-right text-xs">
-                                            <input 
-                                                type="number" 
-                                                wire:model.live.debounce.300ms="cartItems.{{ $index }}.diskon" 
-                                                min="0" 
+                                            <input
+                                                type="number"
+                                                wire:model.live.debounce.300ms="cartItems.{{ $index }}.diskon"
+                                                min="0"
                                                 class="w-full text-right border rounded px-1 py-0.5 text-xs"
                                             >
                                         </td>
@@ -247,7 +247,7 @@
                 {{-- Action Buttons --}}
                 <div class="flex flex-col gap-2 shrink-0">
                     <button type="submit" class="w-full px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-semibold text-xs">Simpan</button>
-                    <a href="{{ route('transaksi-list') }}" wire:navigate class="w-full px-3 py-1.5 border rounded hover:bg-gray-50 text-center text-xs">Kembali</a>
+                    <a href="{{ route('transaksi.penjualan.list') }}" wire:navigate class="w-full px-3 py-1.5 border rounded hover:bg-gray-50 text-center text-xs">Kembali</a>
                 </div>
             </div>
         </div>

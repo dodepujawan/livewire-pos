@@ -18,32 +18,53 @@ Route::get('/dashboard', function () {return view('dashboard.index');})->middlew
 
 // Register
 Route::prefix('auth')->middleware('auth')->group(function () {
-    Route::livewire('/register', 'pages::auth.register')->name('register');
-    Route::livewire('/register-list', 'pages::auth.register-list')->name('register-list');
-    Route::livewire('/register/{id}/edit', 'pages::auth.register-edit')->name('register-edit');
-    Route::livewire('/permission-matrix', 'pages::auth.permission-matrix')->name('permission-matrix');
+    Route::livewire('/register', 'pages::auth.register')->name('auth.register.create');
+    Route::livewire('/register-list', 'pages::auth.register-list')->name('auth.register.list');
+    Route::livewire('/register/{id}/edit', 'pages::auth.register-edit')->name('auth.register.edit');
+    Route::livewire('/permission-matrix', 'pages::auth.permission-matrix')->name('auth.permission.matrix');
 });
 
 // Barang
 Route::prefix('master')->middleware('auth')->group(function () {
-    Route::livewire('/barang', 'pages::master.barang-list')->name('barang-list');
-    Route::livewire('/barang/create', 'pages::master.barang-create')->name('barang-create');
-    Route::livewire('/barang/{id}/edit', 'pages::master.barang-edit')->name('barang-edit');
+    Route::livewire('/barang', 'pages::master.barang-list')->name('master.barang.list');
+    Route::livewire('/barang/create', 'pages::master.barang-create')->name('master.barang.create');
+    Route::livewire('/barang/{id}/edit', 'pages::master.barang-edit')->name('master.barang.edit');
 });
 
 //
 Route::prefix('transaksi')->middleware('auth')->group(function () {
-    Route::livewire('/', 'pages::transaksi.transaksi-list')->name('transaksi-list');
-    Route::livewire('/create', 'pages::transaksi.transaksi-create')->name('transaksi-create');
-    Route::livewire('/{id}', 'pages::transaksi.transaksi-show')->name('transaksi-show');
-    Route::livewire('/{id}/edit', 'pages::transaksi.transaksi-edit')->name('transaksi-edit');
+    Route::livewire('/', 'pages::transaksi.transaksi-list')->name('transaksi.penjualan.list');
+    Route::livewire('/create', 'pages::transaksi.transaksi-create')->name('transaksi.penjualan.create');
+    Route::livewire('/{id}', 'pages::transaksi.transaksi-show')->name('transaksi.penjualan.show');
+    Route::livewire('/{id}/edit', 'pages::transaksi.transaksi-edit')->name('transaksi.penjualan.edit');
 });
 
 Route::prefix('menu')->middleware('auth')->group(function () {
-    Route::livewire('/master/menu','pages::master.menu-list')->name('menu-list');
-    Route::livewire('/master/menu/create', 'pages::master.menu-create')->name('menu-create');
-    Route::livewire('/master/menu/{menu}/edit', 'pages::master.menu-edit')->name('menu-edit');
+    Route::livewire('/','pages::master.menu-list')->name('master.menu.list');
+    Route::livewire('/create', 'pages::master.menu-create')->name('master.menu.create');
+    Route::livewire('/{menu}/edit', 'pages::master.menu-edit')->name('master.menu.edit');
 });
 
 // php artisan make:livewire pages::master.MenuEdit --mfc
 // DeepSeek-V4-Pro, DeepSeek-V4-Flash, gpt-5-mini
+// php artisan route:sync
+// php artisan framework:permission-sync
+// php artisan make:model Permission -m
+// | Action    | Arti                  |
+// | --------- | --------------------- |
+// | list      | Daftar                |
+// | show      | Detail                |
+// | create    | Form tambah           |
+// | store     | Simpan                |
+// | edit      | Form ubah             |
+// | update    | Proses update         |
+// | delete    | Hapus                 |
+// | destroy   | Proses hapus permanen |
+// | print     | Cetak                 |
+// | export    | Export                |
+// | import    | Import                |
+// | approve   | Approve               |
+// | reject    | Tolak                 |
+// | cancel    | Batal                 |
+// | duplicate | Salin                 |
+// | restore   | Restore               |

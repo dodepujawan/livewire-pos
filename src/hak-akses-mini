@@ -1,77 +1,67 @@
+🚀 Roadmap POS SPA Framework
 ✅ Milestone 1 — Foundation (100%)
 ✅ Laravel 12
 ✅ Livewire 4 MFC
 ✅ Route Discovery
 ✅ Route Synchronization
 ✅ Database AUTH
-
 ✅ Milestone 2 — Menu Management (100%)
 ✅ Menu CRUD
 ✅ Parent Menu
 ✅ Child Menu
 ✅ Sort Order
 ✅ Sidebar Flag
-
 ✅ Milestone 3 — Dynamic Sidebar Engine (100%)
 ✅ Database Driven Sidebar
-✅ Parent Child
+✅ Parent / Child
 ✅ Expand / Collapse
 ✅ Livewire State
-
-Ini milestone yang baru saja kita selesaikan. 🎉
-
 🟡 Milestone 4 — Professional UI
-Ini yang mulai besok kita kerjakan.
-⬜ Sidebar Design
-⬜ Active Menu
-⬜ Active Parent
-⬜ Icon Database
-⬜ Hover
-⬜ Transition
-⬜ Mobile
-⬜ Desktop
+☑ Sidebar Design
+☑ Active Menu
+☑ Active Parent
+☑ Icon Database
+☑ Hover
+☑ Transition
+⬜ Mobile Sidebar
+⬜ Desktop Polish
 ⬜ Breadcrumb
 ⬜ Topbar
 ⬜ User Profile
 ⬜ Logout
 
-Ini sudah mulai masuk ke UX.
+Status: Hampir selesai (±85–90%)
 
-🟡 Milestone 5 — Permission Engine
-Menurutku ini milestone paling besar.
-⬜ Display Name pada System Route
-⬜ Auto Fill Title
-⬜ Validasi Route Unik
-⬜ Validasi Menu
-⬜ Route Sync Improvement
-⬜ Rule Satu Route = Satu Menu
+🟢 Milestone 5 — Route Foundation (100%)
 
-🟡 Milestone 6 — Role Engine
+✅ Route Discovery
+✅ Route Synchronization
+✅ Display Name Generator
+✅ Route Filtering
+✅ Route Validation
+✅ One Route = One Menu
+
+🟡 Milestone 6 — Permission Engine (20%)
+
+✅ Permission Synchronization (Spatie)
+✅ Action Mapping
+    list → view
+    edit → update
+    show → view
+
 ⬜ Permission CRUD
-
-⬜ Generate Route Permission
-   barang.view
-   barang.create
-
-⬜ Generate Action Permission
-   barang.update
-   barang.delete
-   barang.print
-   barang.export
-
-⬜ Permission Sync
-
+⬜ Permission Matrix
 ⬜ Permission Seeder
+⬜ Permission Cache
 
-🟡 Milestone 7 — Dynamic Authorization
+🟡 Milestone 7 — Role Engine
 ⬜ Role CRUD
-⬜ Assign Permission to Role ⭐
-⬜ Assign Role to User ⭐
+⬜ Assign Permission to Role
+⬜ Assign Role to User
 ⬜ Role Middleware
 ⬜ Super Admin
 ⬜ Seeder
-
-🟢 Milestone 8 — Framework Polish
+🟢 Milestone 8 — Dynamic Authorization
 ⬜ Auto Hide Menu
 ⬜ Sidebar Filter
 ⬜ Route Filter
@@ -82,42 +72,69 @@ Menurutku ini milestone paling besar.
 ⬜ Blade Directive
 ⬜ Policy
 ⬜ Gate
-
 🟢 Milestone 9 — Developer Experience
 
-Supaya nanti kalau bikin modul tinggal 5 menit.
+Supaya membuat modul baru tinggal beberapa menit.
+
 ⬜ make:crud
 ⬜ make:page
 ⬜ make:master
 ⬜ make:transaction
 ⬜ Generator
 ⬜ Stub
-Ini yang menurutku akan menghemat waktu kita paling banyak untuk modul-modul berikutnya seperti Barang, Customer, Supplier, dll.
-
 🟢 Milestone 10 — Release v1.0
 ⬜ Testing
 ⬜ Documentation
 ⬜ GitHub
 ⬜ Versioning
 ⬜ Release
+🔵 Milestone 11 — Deployment Automation
+⬜ Auto Seeder VPS
+⬜ Auto Route Sync
+⬜ Auto Permission Sync
+⬜ Initial Setup Wizard
+🎨 Extra UI Enhancement (Future)
 
+Tidak mempengaruhi arsitektur.
 
-Milestone 11
-auto seeder vps
+⬜ UI Theme v2
+⬜ Dark Sidebar
+⬜ Glass Effect
+⬜ Smooth Animation
+⬜ Overlay
+⬜ Mobile Drawer
+⬜ SPA (wire:navigate)
+⬜ Ripple Hover
+⬜ Badge Notification
+📘 Framework Decision Record (FDR)
+FDR-001 — Menu & Route Rules
+✅ system_routes menyimpan daftar seluruh halaman aplikasi.
+✅ display_name adalah nama default halaman.
+✅ menus.title adalah nama yang tampil di sidebar dan boleh diubah oleh Admin.
+✅ Parent Menu boleh mempunyai Route atau tidak mempunyai Route.
+✅ Child Menu wajib mempunyai Route.
+✅ Satu system_route hanya boleh dipakai oleh satu Menu.
+📌 Framework Principle
 
-Extra UI Enhanchment
-UI Theme v2
-Dark Sidebar
-Glass Effect
-Smooth Animation
-Overlay
-Mobile Drawer
-SPA (wire:navigate)
-Ripple Hover
-Badge Notification
+Sebelum menambah fitur baru, selalu tanyakan:
 
 Apakah fitur ini memang dibutuhkan?
 Apakah ada cara yang lebih sederhana?
 Apakah scalable?
 Apakah mudah di-maintain?
-Kalau client minta perubahan 2 tahun lagi, apakah kita harus bongkar?
+Kalau client minta perubahan 2 tahun lagi, apakah kita harus membongkar arsitektur?
+Review dari aku
+
+Aku ingin mengomentari satu hal yang menurutku sangat positif.
+
+Roadmap ini sekarang tidak lagi berisi daftar fitur, tetapi sudah mulai menjadi peta pembangunan framework.
+
+Contohnya:
+
+Milestone 1–3 = membangun fondasi.
+Milestone 4 = membuat framework nyaman dipakai.
+Milestone 5–8 = membuat framework pintar (permission, role, authorization).
+Milestone 9 = membuat developer cepat bekerja.
+Milestone 10–11 = membuat framework siap dipakai di dunia nyata.
+
+Menurutku urutan ini jauh lebih masuk akal daripada langsung mengejar fitur bisnis satu per satu.

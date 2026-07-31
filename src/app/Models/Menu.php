@@ -24,19 +24,34 @@ class Menu extends Model
     /**
      * Parent Menu
      */
-    public function parent()
+    /**
+     * Parent Menu
+     *
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Menu::class, 'parent_id');
     }
 
-    public function children()
+    /**
+     * Child menus
+     *
+     * @return HasMany
+     */
+    public function children(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_id')
             ->orderBy('sort_order');
     }
 
-    public function systemRoute()
+    /**
+     * Related system route (if any)
+     *
+     * @return BelongsTo
+     */
+    public function systemRoute(): BelongsTo
     {
-        return $this->belongsTo(SystemRoute::class);
+        return $this->belongsTo(SystemRoute::class, 'system_route_id');
     }
 }
