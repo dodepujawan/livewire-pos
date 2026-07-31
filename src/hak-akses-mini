@@ -1,15 +1,36 @@
-🚀 Roadmap POS SPA Framework
+🚀 POS SPA Framework Roadmap (the real documentation)
 ✅ Milestone 1 — Foundation (100%)
+Tujuan
+
+Membangun fondasi framework agar seluruh halaman dapat ditemukan dan disinkronkan secara otomatis.
+
+Fitur
 ✅ Laravel 12
 ✅ Livewire 4 MFC Architecture
-✅ Database Authentication
 ✅ Route Discovery
 ✅ Route Synchronization
 ✅ System Route Table
 ✅ Display Name Generator
 ✅ Route Validation
 ✅ One Route = One System Route
+File
+app/
+│
+├── Console/
+│   └── Commands/
+│       └── RouteSyncCommand.php
+│
+├── Models/
+│   └── SystemRoute.php
+│
+database/
+│
+└── migrations/
+    └── create_system_routes_table.php
+Artisan
+php artisan framework:route-sync
 ✅ Milestone 2 — Dynamic Menu Management (95%)
+Fitur
 ✅ Menu CRUD
 ✅ Parent Menu
 ✅ Child Menu
@@ -17,12 +38,32 @@
 ✅ Sidebar Flag
 ✅ Route Relation
 ✅ Icon Database
-
 Remaining
+⬜ Editable Menu Title (menus.title)
+⬜ Menu Preview
+File
+app/
+│
+├── Models/
+│   └── Menu.php
+│
+database/
+│
+├── migrations/
+│   └── create_menus_table.php
+│
+└── seeders/
+    └── MenuSeeder.php
 
-⬜ Editable Menu Title (menus.title) terintegrasi penuh dengan Sidebar
-⬜ Menu Preview setelah edit
+resources/views/pages/master/
+
+⚡menu-list
+⚡menu-create
+⚡menu-edit
+Artisan
+php artisan db:seed --class=MenuSeeder
 ✅ Milestone 3 — Dynamic Sidebar Engine (100%)
+Fitur
 ✅ Database Driven Sidebar
 ✅ Parent / Child
 ✅ Expand / Collapse
@@ -30,16 +71,27 @@ Remaining
 ✅ Active Child
 ✅ Sort Order
 ✅ Icon Support
-✅ Livewire Navigate Ready
+✅ Livewire Navigate
+File
+resources/views/components/
+
+sidebar/
+
+layouts/
+
+app.blade.php
+Remaining
+
+Tidak ada.
+
 🟡 Milestone 4 — UI Foundation (85%)
+Done
 ✅ Sidebar UI
 ✅ Hover Effect
 ✅ Transition
 ✅ Active Menu
 ✅ Active Parent
-
 Remaining
-
 ⬜ Breadcrumb
 ⬜ Topbar
 ⬜ User Profile
@@ -47,12 +99,21 @@ Remaining
 ⬜ Mobile Sidebar
 ⬜ Desktop Polish
 ✅ Milestone 5 — Route Foundation (100%)
+Fitur
 ✅ Route Discovery
 ✅ Route Synchronization
 ✅ Route Filtering
 ✅ Display Name Generator
 ✅ Dynamic Menu Source
-🟡 Milestone 6 — Permission Engine (65%)
+File
+app/
+
+Console/
+    RouteSyncCommand.php
+
+Models/
+    SystemRoute.php
+🟢 Milestone 6 — Permission Engine (100%)
 Done
 ✅ Spatie Permission
 ✅ Route → Permission Mapping
@@ -66,15 +127,37 @@ edit   → update
 ✅ Role Permission Sync
 ✅ Select All
 ✅ Clear All
-In Progress
-⬜ Additional Permission Scanner ($additionalPermissions)
-⬜ Livewire Component Scanner
-⬜ Controller Scanner
-⬜ Merge Route Permission + Additional Permission
-⬜ Auto Remove Unused Permission
+✅ Additional Permission Scanner
+✅ Livewire Component Scanner
+✅ Controller Scanner
+✅ Merge Route Permission + Additional Permission
+✅ Auto Remove Unused Permission
 Remaining
 ⬜ Permission Cache
 ⬜ Permission Seeder
+File
+app/
+
+Console/
+    PermissionSyncCommand.php
+
+Services/
+    PermissionScannerService.php
+
+resources/views/pages/auth/
+
+⚡permission-matrix
+
+database/
+
+create_permission_tables.php
+
+seeders/
+
+RoleSeeder.php
+SuperAdminSeeder.php
+Artisan
+php artisan framework:permission-sync
 🟡 Milestone 7 — Role Engine (70%)
 Done
 ✅ Role List
@@ -87,31 +170,37 @@ Done
 Remaining
 ⬜ Assign Role to User
 ⬜ Role Seeder
+File
+resources/views/pages/system/
+
+⚡role-list
+
+database/seeders/
+
+RoleSeeder.php
+SuperAdminSeeder.php
+UserSeeder.php
 🟡 Milestone 8 — Dynamic Authorization (10%)
-
 Remaining
-
 ⬜ Sidebar Permission Filter
 ⬜ Route Middleware
 ⬜ Livewire Permission Guard
 ⬜ Controller Permission Guard
 ⬜ Blade Helper
 ⬜ Permission Helper
-⬜ Milestone 9 — Developer Experience
-
+🟡 Milestone 9 — Developer Experience
 Framework Generator
-
 ⬜ make:master
 ⬜ make:transaction
 ⬜ make:page
 ⬜ CRUD Generator
 ⬜ Stub Generator
-⬜ Milestone 10 — Release v1
+🟡 Milestone 10 — Release v1
 ⬜ Testing
 ⬜ Documentation
 ⬜ Versioning
 ⬜ GitHub Release
-⬜ Milestone 11 — Deployment
+🟡 Milestone 11 — Deployment
 ⬜ Auto Route Sync
 ⬜ Auto Permission Sync
 ⬜ Seeder Automation
@@ -119,11 +208,11 @@ Framework Generator
 📘 Framework Decision Record (LOCK)
 FDR-001 — Route Rules
 ✅ Route bebas jumlah segmen.
-✅ Segmen terakhir adalah Page Action (list, show, create, edit, dll).
+✅ Segmen terakhir adalah Page Action.
 ✅ Semua segmen sebelumnya dianggap Resource.
-✅ Route hanya merepresentasikan Page, bukan Action bisnis.
+✅ Route hanya merepresentasikan Page.
 FDR-002 — Menu Rules
-✅ system_routes menyimpan seluruh halaman aplikasi.
+✅ system_routes menyimpan seluruh halaman.
 ✅ display_name adalah nama default halaman.
 ✅ menus.title adalah nama Sidebar yang dapat diubah Admin.
 ✅ Parent Menu boleh memiliki Route atau tidak.
@@ -142,22 +231,16 @@ Permission tambahan berasal dari:
 
 protected array $additionalPermissions = [];
 
-Framework akan melakukan:
+Flow:
 
 Route
-        ↓
+      ↓
 Permission Mapping
-
-+
-
+      +
 additionalPermissions
-
-↓
-
+      ↓
 Merge
-
-↓
-
+      ↓
 Spatie Permission
 FDR-004 — Scanner Rules
 
@@ -168,7 +251,11 @@ Didukung:
 ✅ Livewire MFC Component
 ✅ Laravel Controller
 
-Framework tidak melakukan scan seluruh project, sehingga proses sync tetap cepat dan hanya membaca file yang benar-benar digunakan.
+Scanner Livewire menggunakan metadata route:
+
+livewire_component
+
+Kemudian membaca additionalPermissions langsung dari source code (regex), bukan dengan meng-instantiate anonymous component. Ini dipilih agar kompatibel dengan arsitektur Livewire MFC yang menggunakan new class extends Component.
 
 📌 Framework Principle
 

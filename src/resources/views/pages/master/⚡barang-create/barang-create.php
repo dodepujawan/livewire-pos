@@ -6,6 +6,10 @@ use Livewire\Component;
 
 new class extends Component
 {
+    protected array $additionalPermissions = [
+        'master.barang.delete',
+        'master.barang.export',
+    ];
     public string $createBarangKode = '';
     public string $createBarangNama = '';
     public int $createBarangStok = 0;

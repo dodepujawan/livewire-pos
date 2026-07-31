@@ -13,76 +13,89 @@ class PermissionScannerService
 
         foreach (Route::getRoutes() as $route) {
 
-            $handler = $route->getAction('uses');
-
-            // Controller
-            if (is_string($handler) && str_contains($handler, '@')) {
-
-                [$class] = explode('@', $handler);
-
-                if (! class_exists($class)) {
-                    continue;
-                }
-
-                $reflection = new ReflectionClass($class);
-
-                if (! $reflection->hasProperty('additionalPermissions')) {
-                    continue;
-                }
-
-                $property = $reflection->getProperty('additionalPermissions');
-
-                $property->setAccessible(true);
-
+            // Scan Livewire Page
+            if ($component = $route->getAction('livewire_component')) {
                 $permissions = array_merge(
                     $permissions,
-                    $property->getValue(new $class)
+                    $this->scanLivewire($component)
                 );
-
-                continue;
             }
 
-            // Livewire MFC
-            if (is_string($handler) && str_starts_with($handler, 'pages::')) {
-
+            // Scan Controller
+            if ($controller = $route->getAction('controller')) {
                 $permissions = array_merge(
                     $permissions,
-                    $this->scanLivewire($handler)
+                    $this->scanController($controller)
                 );
             }
         }
 
-        return array_unique($permissions);
+        return array_values(array_unique($permissions));
     }
 
-    protected function scanLivewire(string $handler): array
+    protected function scanController(string $controller): array
     {
-        $handler = str_replace('pages::', '', $handler);
+        if (! class_exists($controller)) {
+            return [];
+        }
+
+        $reflection = new ReflectionClass($controller);
+
+        if (! $reflection->hasProperty('additionalPermissions')) {
+            return [];
+        }
+
+        $instance = app($controller);
+
+        return $reflection
+            ->getProperty('additionalPermissions')
+            ->getValue($instance) ?? [];
+    }
+
+    protected function scanLivewire(string $component): array
+    {
+        $component = str_replace('pages::', '', $component);
+
+        $segments = explode('.', $component);
+
+        $name = array_pop($segments);
 
         $path = resource_path(
             'views/pages/' .
-            str_replace('.', '/', $handler) .
-            '/' .
-            basename($handler) .
-            '.php'
+            implode('/', $segments) .
+            '/⚡' . $name .
+            '/' . $name . '.php'
         );
 
         if (! file_exists($path)) {
             return [];
         }
 
-        $component = include $path;
+        return $this->extractPermissions($path);
+    }
 
-        $reflection = new ReflectionClass($component);
+    protected function extractPermissions(string $path): array
+    {
+        $content = file_get_contents($path);
 
-        if (! $reflection->hasProperty('additionalPermissions')) {
+        if ($content === false) {
             return [];
         }
 
-        $property = $reflection->getProperty('additionalPermissions');
+        if (! preg_match(
+            '/protected\s+array\s+\$additionalPermissions\s*=\s*\[(.*?)\];/is',
+            $content,
+            $matches
+        )) {
+            return [];
+        }
 
-        $property->setAccessible(true);
+        preg_match_all(
+            '/["\']([^"\']+)["\']/',
+            $matches[1],
+            $permissions
+        );
 
-        return $property->getValue($component);
+        return array_unique($permissions[1]);
     }
 }

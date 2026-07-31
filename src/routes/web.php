@@ -49,12 +49,10 @@ Route::prefix('system')->name('system.')->group(function () {
     Route::livewire('/roles', 'pages::system.role-list')->name('role.list');
 });
 
-Route::prefix('system')
-    ->middleware('auth')
-    ->name('system.')
-    ->group(function () {
-        Route::livewire('/', 'pages::system.system-management')->name('index');
-    });
+Route::prefix('system')->middleware('auth')->name('system.')->group(function () {
+    Route::livewire('/', 'pages::system.system-management')->name('index');
+});
+
 // php artisan make:livewire pages::master.MenuEdit --mfc
 // gpt-5.6-luna, gpt-5.6-terra, gpt-5.6-sol, gpt-5-mini, grok-4.3, DeepSeek-V4-Pro, DeepSeek-V4-Flash
 // php artisan route:sync

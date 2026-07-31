@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\SystemRoute;
+use App\Services\PermissionScannerService;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
 
@@ -46,7 +47,12 @@ class PermissionSyncCommand extends Command
     {
         $routePermissions = SystemRoute::query()
             ->pluck('route_name')
-            ->map(fn ($route) => $this->convertPermission($route))
+            ->map(fn ($route) => $this->convertPermission($route));
+
+        $additionalPermissions = app(PermissionScannerService::class)->scan();
+
+        $routePermissions = $routePermissions
+            ->merge($additionalPermissions)
             ->unique()
             ->values();
 

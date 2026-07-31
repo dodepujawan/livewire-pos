@@ -3,6 +3,7 @@
 use App\Models\Menu;
 use App\Models\SystemRoute;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -12,6 +13,7 @@ new class extends Component
     public ?string $icon = null;
     public int $sort_order = 1;
     public bool $is_sidebar = true;
+    public bool $titleCustomized = false;
 
     protected function rules(): array
     {
@@ -44,6 +46,28 @@ new class extends Component
             ],
 
         ];
+    }
+
+    public function updatedTitle(): void
+    {
+        $this->titleCustomized = true;
+    }
+
+    public function updatedSystemRouteId($value): void
+    {
+        if (blank($value)) {
+            return;
+        }
+
+        $route = SystemRoute::find($value);
+
+        if (!$route) {
+            return;
+        }
+
+        if (!$this->titleCustomized) {
+            $this->title = $route->display_name;
+        }
     }
 
     public function save(): void{

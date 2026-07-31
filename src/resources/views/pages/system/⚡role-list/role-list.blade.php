@@ -4,7 +4,7 @@
         title="Role Management"
         description="Kelola role, permission, dan pengguna yang menggunakannya."
     >
-        <x-slot:actions>
+        {{-- <x-slot:actions>
             <a
                 href="{{ route('system.role.create') }}"
                 wire:navigate
@@ -12,7 +12,7 @@
             >
                 Tambah Role
             </a>
-        </x-slot:actions>
+        </x-slot:actions> --}}
     </x-page.header>
 
     @if (session()->has('success'))
@@ -64,13 +64,13 @@
 
                         <x-table.td class="text-center">
                             <div class="flex justify-center gap-2">
-                                <a
+                                {{-- <a
                                     href="{{ route('system.role.edit', $role) }}"
                                     wire:navigate
                                     class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
                                 >
                                     Edit
-                                </a>
+                                </a> --}}
 
                                 <x-button.danger
                                     wire:click="delete({{ $role->id }})"

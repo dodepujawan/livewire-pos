@@ -25,7 +25,7 @@
                         @endforeach
                     </x-form.select>
 
-                    <x-form.select label="Route" name="system_route_id" wire:model="system_route_id">
+                    <x-form.select label="Route" name="system_route_id" wire:model.live="system_route_id">
                         <option value="">No Route</option>
                         @foreach($systemRoutes as $route)
                             <option value="{{ $route->id }}">{{ $route->route_name }}</option>
