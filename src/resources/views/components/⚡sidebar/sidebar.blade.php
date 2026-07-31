@@ -6,7 +6,7 @@
 
                 <div wire:click="toggleMenu({{ $menu->id }})"
                     @class([
-                        'flex items-center justify-between h-11 px-3 rounded-lg cursor-pointer transition-colors duration-200',
+                        'flex items-center justify-between h-11 px-3 rounded-lg cursor-pointer transition-colors transition-all duration-200',
                         'bg-indigo-100 text-indigo-700 font-semibold' => $this->isActive($menu) || $this->hasActiveChild($menu),
                         'hover:bg-gray-100' => !$this->isActive($menu) && !$this->hasActiveChild($menu),
                     ])
