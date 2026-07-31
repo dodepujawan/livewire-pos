@@ -11,8 +11,17 @@
                         'hover:bg-gray-100' => !$this->isActive($menu) && !$this->hasActiveChild($menu),
                     ])
                 >
-                    <span class="text-sm font-medium">{{ $menu->title }}</span>
-                    <span class="text-xs">{{ in_array($menu->id, $openedMenus) ? '▼' : '▶' }}</span>
+                    <div class="flex items-center gap-3">
+                        @if($menu->icon)
+                            <i class="{{ $menu->icon }} text-lg"></i>
+                        @endif
+                        <span class="text-sm font-medium">
+                            {{ $menu->title }}
+                        </span>
+                    </div>
+                    <span class="text-xs transition-transform duration-200">
+                        <i class="ti {{ in_array($menu->id, $openedMenus) ? 'ti-chevron-down' : 'ti-chevron-right' }}"></i>
+                    </span>
                 </div>
 
                 @if(in_array($menu->id, $openedMenus))
@@ -21,7 +30,7 @@
                             <a
                                 @if($child->systemRoute) href="{{ route($child->systemRoute->route_name) }}" @endif
                                 @class([
-                                    'ml-8 h-10 flex items-center rounded-lg px-3 transition-colors duration-200',
+                                    'ml-6 h-10 flex items-center rounded-lg px-3 transition-colors duration-200',
                                     'bg-indigo-100 text-indigo-700 font-medium' => $this->isActive($child),
                                     'hover:bg-gray-50' => !$this->isActive($child),
                                 ])
@@ -35,9 +44,16 @@
 
                 <a
                     href="{{ route($menu->systemRoute->route_name) }}"
-                    class="flex items-center h-11 px-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 text-sm font-medium"
+                    @class([
+                        'flex items-center gap-3 h-11 px-3 rounded-lg transition-colors duration-200',
+                        'bg-indigo-100 text-indigo-700 font-semibold' => $this->isActive($menu),
+                        'hover:bg-gray-100' => !$this->isActive($menu),
+                    ])
                 >
-                    {{ $menu->title }}
+                    @if($menu->icon)
+                        <i class="{{ $menu->icon }} text-lg"></i>
+                    @endif
+                    <span class="text-sm font-medium">{{ $menu->title }}</span>
                 </a>
             @endif
 
