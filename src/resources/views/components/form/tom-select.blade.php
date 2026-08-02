@@ -77,32 +77,40 @@
 
 @once
 <script>
-document.addEventListener('livewire:init', () => {
-    const initializeTomSelect = (root = document) => {
-        const selects = root.matches?.('select[data-tom-select]')
-            ? [root]
-            : root.querySelectorAll('select[data-tom-select]');
+const initializeTomSelect = (root = document) => {
+    const selects = root.matches?.('select[data-tom-select]')
+        ? [root]
+        : root.querySelectorAll('select[data-tom-select]');
 
-        selects.forEach(select => {
-            if (select.tomselect) {
-                return;
-            }
+    selects.forEach(select => {
+        if (select.tomselect) {
+            return;
+        }
 
-            new TomSelect(select, {
-                create: false,
-                allowEmptyOption: true,
-                placeholder: select.dataset.placeholder || 'Select...',
-                searchField: ['text'],
-                maxOptions: 500,
-            });
+        new TomSelect(select, {
+            create: false,
+            allowEmptyOption: true,
+            placeholder: select.dataset.placeholder || 'Select...',
+            searchField: ['text'],
+            maxOptions: 500,
         });
-    };
-
-    initializeTomSelect();
-
-    Livewire.hook('morph.added', ({ el }) => {
-        initializeTomSelect(el);
     });
+};
+
+document.addEventListener('livewire:init', () => {
+    initializeTomSelect();
+});
+
+document.addEventListener('livewire:navigated', () => {
+    initializeTomSelect();
+});
+
+Livewire.hook('morph.updated', ({ el }) => {
+    initializeTomSelect(el);
+});
+
+Livewire.hook('morph.added', ({ el }) => {
+    initializeTomSelect(el);
 });
 </script>
 @endonce

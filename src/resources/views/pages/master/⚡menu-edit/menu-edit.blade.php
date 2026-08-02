@@ -16,55 +16,122 @@
 
     <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {{-- Form --}}
             <div class="md:col-span-2 bg-white p-4 rounded-lg shadow-sm">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <x-form.select label="Parent Menu" name="parent_id" wire:model="parent_id">
-                        <option value="">Root Menu</option>
-                        @foreach($parentMenus as $menu)
-                            <option value="{{ $menu->id }}">{{ $menu->title }}</option>
-                        @endforeach
-                    </x-form.select>
+                    {{-- Parent Menu --}}
+                    <div class="sm:col-span-2">
+                        <div class="flex items-end gap-2">
+                            <div class="flex-1">
+                                <x-form.select
+                                    label="Parent Menu"
+                                    name="parent_id"
+                                    wire:model="parent_id"
+                                >
+                                    <option value="">Edit Root Menu (No Parent)</option>
+                                    @foreach($parentMenus as $menu)
+                                        <option value="{{ $menu->id }}">{{ $menu->title }}</option>
+                                    @endforeach
+                                </x-form.select>
+                            </div>
+                            <button
+                                type="button"
+                                wire:click="openRootMenuModal"
+                                class="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50"
+                                title="Create Root Menu"
+                            >
+                                <i class="ti ti-plus"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 -mt-3">
+                            Pilih <strong>Edit Root Menu</strong> untuk membuat menu utama,
+                            atau pilih salah satu parent untuk membuat submenu.
+                        </p>
+                    </div>
 
-                    <x-form.select label="Route" name="system_route_id" wire:model="system_route_id">
-                        <option value="">No Route</option>
-                        @foreach($systemRoutes as $route)
-                            <option value="{{ $route->id }}">{{ $route->route_name }}</option>
-                        @endforeach
-                    </x-form.select>
+                    {{-- Route --}}
+                    <div class="sm:col-span-2">
+                        <x-form.tom-select
+                            label="Route"
+                            name="system_route_id"
+                            wire:model.live="system_route_id"
+                            data-tom-select
+                            data-placeholder="No Route"
+                        >
+                            <option value=""></option>
+                            @foreach($systemRoutes as $route)
+                                <option value="{{ $route->id }}">
+                                    {{ $route->display_name }}
+                                    ({{ $route->route_name }})
+                                </option>
+                            @endforeach
+                        </x-form.tom-select>
+                        <p class="text-xs text-gray-500 -mt-3">
+                            Kosongkan jika menu hanya digunakan sebagai Parent Menu.
+                        </p>
+                    </div>
 
-                    <x-form.input label="Title" name="title" wire:model="title" />
-                    <x-form.input label="Icon" name="icon" wire:model="icon" />
-                    <x-form.input label="Sort Order" name="sort_order" type="number" wire:model="sort_order" />
+                    {{-- Title --}}
+                    <x-form.input
+                        label="Title"
+                        name="title"
+                        wire:model.live="title"
+                    />
 
-                    <div class="flex items-center gap-3">
-                        <input id="is_sidebar" type="checkbox" wire:model="is_sidebar" class="h-4 w-4 rounded border-gray-300">
-                        <label for="is_sidebar" class="text-sm">Show in Sidebar</label>
+                    {{-- Icon --}}
+                    <x-form.input
+                        label="Icon"
+                        name="icon"
+                        wire:model.live="icon"
+                    />
+
+                    {{-- Sort --}}
+                    <x-form.input
+                        label="Sort Order"
+                        name="sort_order"
+                        type="number"
+                        wire:model.live="sort_order"
+                    />
+
+                    {{-- Sidebar --}}
+                    <div class="flex items-center gap-2 pt-7">
+                        <input
+                            id="is_sidebar"
+                            type="checkbox"
+                            wire:model="is_sidebar"
+                            class="rounded border-gray-300"
+                        >
+                        <label for="is_sidebar">Show in Sidebar</label>
                     </div>
                 </div>
             </div>
 
+            {{-- Preview --}}
             <div class="md:col-span-1">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="text-sm font-medium text-gray-700 mb-3">Preview</h3>
-                    <div class="border rounded p-3 bg-white">
+                    <div class="border rounded-lg p-4 bg-white">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded flex items-center justify-center bg-blue-50 text-blue-600 text-xl">
-                                @if(!empty($icon))
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 text-xl">
+                                @if($icon)
                                     <i class="{{ $icon }}"></i>
                                 @else
-                                    <!-- simple placeholder icon -->
-                                    <svg class="w-5 h-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                                     </svg>
                                 @endif
                             </div>
                             <div>
-                                <div class="font-semibold text-gray-800 text-lg">{{ $title ?? 'Menu Title' }}</div>
-                                <div class="text-sm text-gray-500">Parent: {{ optional($parentMenus->firstWhere('id', $parent_id))->title ?? 'Root' }}</div>
+                                <div class="font-semibold text-lg text-gray-800">{{ $title ?: 'Menu Title' }}</div>
+                                <div class="text-sm text-gray-500">
+                                    Parent : {{ optional($parentMenus->firstWhere('id', $parent_id))->title ?? 'Create Root Menu' }}
+                                </div>
                             </div>
                         </div>
-
-                        <div class="mt-3 text-sm text-gray-500">Route: {{ optional($systemRoutes->firstWhere('id', $system_route_id))->route_name ?? 'No Route' }}</div>
+                        <div class="mt-4 border-t pt-3 text-sm text-gray-500">
+                            Route : {{ optional($systemRoutes->firstWhere('id', $system_route_id))->route_name ?? 'No Route' }}
+                        </div>
+                        <div class="mt-2 text-sm text-gray-500">Sidebar : {{ $is_sidebar ? 'Yes' : 'No' }}</div>
                     </div>
                 </div>
             </div>
@@ -79,4 +146,51 @@
             </button>
         </div>
     </div>
+        @if($showRootMenuModal)
+            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                <div class="w-full max-w-md rounded-xl bg-white shadow-xl">
+                    <div class="border-b px-6 py-4">
+                        <h2 class="text-lg font-semibold">Create Root Menu</h2>
+                    </div>
+                    <div class="space-y-4 p-6">
+                        <x-form.input
+                            label="Title"
+                            name="rootTitle"
+                            wire:model.defer="rootTitle"
+                        />
+                        <x-form.input
+                            label="Icon"
+                            name="rootIcon"
+                            wire:model.defer="rootIcon"
+                        />
+                        <x-form.input
+                            label="Sort Order"
+                            name="rootSortOrder"
+                            type="number"
+                            wire:model.defer="rootSortOrder"
+                        />
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" wire:model.defer="rootIsSidebar">
+                            Show in Sidebar
+                        </label>
+                    </div>
+                    <div class="flex justify-end gap-3 border-t px-6 py-4">
+                        <button
+                            type="button"
+                            wire:click="$set('showRootMenuModal', false)"
+                            class="rounded-lg border px-4 py-2"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            wire:click="saveRootMenu"
+                            class="rounded-lg bg-blue-600 px-4 py-2 text-white"
+                        >
+                            Create
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @endif
 </x-form.card>

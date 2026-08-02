@@ -84,7 +84,7 @@ new class extends Component
             'Menu berhasil ditambahkan.'
         );
 
-        $this->redirectRoute('menu-list');
+        $this->redirectRoute('master.menu-.list');
     }
 
     public function openRootMenuModal(): void
