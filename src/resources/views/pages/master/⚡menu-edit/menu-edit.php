@@ -57,7 +57,7 @@ new class extends Component
             'success',
             'Menu berhasil diperbarui.'
         );
-        $this->redirectRoute('menu-list');
+        $this->redirectRoute('master.menu.list');
     }
 
     public function mount(Menu $menu): void

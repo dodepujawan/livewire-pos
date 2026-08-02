@@ -32,7 +32,7 @@
                         <td class="px-4 py-3 text-center">{{ $menu->is_sidebar ? 'Ya' : 'Tidak' }}</td>
                         <td class="px-4 py-3">
                             <div class="flex justify-center gap-2">
-                                <a href="{{ route('menu-edit', $menu) }}" wire:navigate class="rounded bg-yellow-500 px-3 py-1 text-sm text-white hover:bg-yellow-600">Edit</a>
+                                <a href="{{ route('master.menu.edit', $menu) }}" wire:navigate class="rounded bg-yellow-500 px-3 py-1 text-sm text-white hover:bg-yellow-600">Edit</a>
                                 <button type="button" wire:click="delete({{ $menu->id }})" wire:confirm="Yakin ingin menghapus menu ini?" class="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700">Delete</button>
                             </div>
                         </td>

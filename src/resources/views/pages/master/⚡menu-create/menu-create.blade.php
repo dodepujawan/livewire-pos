@@ -51,19 +51,21 @@
 
                     {{-- Route --}}
                     <div class="sm:col-span-2">
-                        <x-form.select
+                        <x-form.tom-select
                             label="Route"
                             name="system_route_id"
                             wire:model.live="system_route_id"
+                            data-tom-select
+                            data-placeholder="No Route"
                         >
-                            <option value="">No Route</option>
+                            <option value=""></option>
                             @foreach($systemRoutes as $route)
                                 <option value="{{ $route->id }}">
                                     {{ $route->display_name }}
                                     ({{ $route->route_name }})
                                 </option>
                             @endforeach
-                        </x-form.select>
+                        </x-form.tom-select>
                         <p class="text-xs text-gray-500 -mt-3">
                             Kosongkan jika menu hanya digunakan sebagai Parent Menu.
                         </p>
