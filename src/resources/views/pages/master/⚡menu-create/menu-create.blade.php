@@ -34,14 +34,6 @@
                                     @endforeach
                                 </x-form.select>
                             </div>
-                            <button
-                                type="button"
-                                wire:click="openRootMenuModal"
-                                class="mb-5 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50"
-                                title="Create Root Menu"
-                            >
-                                <i class="ti ti-plus"></i>
-                            </button>
                         </div>
                         <p class="text-xs text-gray-500 -mt-3">
                             Pilih <strong>Create Root Menu</strong> untuk membuat menu utama,
@@ -146,51 +138,4 @@
             </button>
         </div>
     </div>
-    @if($showRootMenuModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            <div class="w-full max-w-md rounded-xl bg-white shadow-xl">
-                <div class="border-b px-6 py-4">
-                    <h2 class="text-lg font-semibold">Create Root Menu</h2>
-                </div>
-                <div class="space-y-4 p-6">
-                    <x-form.input
-                        label="Title"
-                        name="rootTitle"
-                        wire:model.defer="rootTitle"
-                    />
-                    <x-form.input
-                        label="Icon"
-                        name="rootIcon"
-                        wire:model.defer="rootIcon"
-                    />
-                    <x-form.input
-                        label="Sort Order"
-                        name="rootSortOrder"
-                        type="number"
-                        wire:model.defer="rootSortOrder"
-                    />
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" wire:model.defer="rootIsSidebar">
-                        Show in Sidebar
-                    </label>
-                </div>
-                <div class="flex justify-end gap-3 border-t px-6 py-4">
-                    <button
-                        type="button"
-                        wire:click="$set('showRootMenuModal', false)"
-                        class="rounded-lg border px-4 py-2"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="button"
-                        wire:click="saveRootMenu"
-                        class="rounded-lg bg-blue-600 px-4 py-2 text-white"
-                    >
-                        Create
-                    </button>
-                </div>
-            </div>
-        </div>
-    @endif
 </x-form.card>

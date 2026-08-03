@@ -43,17 +43,26 @@
                 @else
 
                 <a
-                    href="{{ route($menu->systemRoute->route_name) }}"
+                    @if($menu->systemRoute)
+                        href="{{ route($menu->systemRoute->route_name) }}"
+                    @else
+                        href="javascript:void(0)"
+                        style="pointer-events: none; cursor: default;"
+                    @endif
                     @class([
                         'flex items-center gap-3 h-11 px-3 rounded-lg transition-colors duration-200',
                         'bg-indigo-100 text-indigo-700 font-semibold' => $this->isActive($menu),
-                        'hover:bg-gray-100' => !$this->isActive($menu),
+                        'hover:bg-gray-100' => !$this->isActive($menu) && $menu->systemRoute,
+                        'text-gray-500' => !$menu->systemRoute,
                     ])
                 >
                     @if($menu->icon)
                         <i class="{{ $menu->icon }} text-lg"></i>
                     @endif
-                    <span class="text-sm font-medium">{{ $menu->title }}</span>
+
+                    <span class="text-sm font-medium">
+                        {{ $menu->title }}
+                    </span>
                 </a>
             @endif
 

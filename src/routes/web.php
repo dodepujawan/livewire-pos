@@ -63,21 +63,4 @@ Route::prefix('system')->middleware('auth')->name('system.')->group(function () 
 //     'system.role.assign',
 // ];
 // php artisan make:model Permission -m
-// | Action    | Arti                  |
-// | --------- | --------------------- |
-// | list      | Daftar                |
-// | show      | Detail                |
-// | create    | Form tambah           |
-// | store     | Simpan                |
-// | edit      | Form ubah             |
-// | update    | Proses update         |
-// | delete    | Hapus                 |
-// | destroy   | Proses hapus permanen |
-// | print     | Cetak                 |
-// | export    | Export                |
-// | import    | Import                |
-// | approve   | Approve               |
-// | reject    | Tolak                 |
-// | cancel    | Batal                 |
-// | duplicate | Salin                 |
-// | restore   | Restore               |
+

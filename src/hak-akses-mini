@@ -29,18 +29,22 @@ database/
     └── create_system_routes_table.php
 Artisan
 php artisan framework:route-sync
-✅ Milestone 2 — Dynamic Menu Management (95%)
+✅ Milestone 2 — Dynamic Menu Management (100%)
 Fitur
 ✅ Menu CRUD
 ✅ Parent Menu
 ✅ Child Menu
+✅ Dynamic Root Menu
+✅ Parent Menu Modal
 ✅ Sort Order
 ✅ Sidebar Flag
 ✅ Route Relation
 ✅ Icon Database
-Remaining
-⬜ Editable Menu Title (menus.title)
-⬜ Menu Preview
+✅ Editable Menu Title (menus.title)
+✅ Auto Display Name dari Route
+✅ Menu Preview
+
+File
 File
 app/
 │
@@ -74,11 +78,8 @@ Fitur
 ✅ Livewire Navigate
 File
 resources/views/components/
-
 sidebar/
-
 layouts/
-
 app.blade.php
 Remaining
 
@@ -98,6 +99,7 @@ Remaining
 ⬜ Logout Dropdown
 ⬜ Mobile Sidebar
 ⬜ Desktop Polish
+
 ✅ Milestone 5 — Route Foundation (100%)
 Fitur
 ✅ Route Discovery
@@ -107,12 +109,11 @@ Fitur
 ✅ Dynamic Menu Source
 File
 app/
-
 Console/
     RouteSyncCommand.php
-
 Models/
     SystemRoute.php
+
 🟢 Milestone 6 — Permission Engine (100%)
 Done
 ✅ Spatie Permission
@@ -137,27 +138,23 @@ Remaining
 ⬜ Permission Seeder
 File
 app/
-
 Console/
     PermissionSyncCommand.php
-
 Services/
     PermissionScannerService.php
-
+Models/
+    SystemRoute.php
 resources/views/pages/auth/
-
 ⚡permission-matrix
-
 database/
-
 create_permission_tables.php
-
 seeders/
 
 RoleSeeder.php
 SuperAdminSeeder.php
 Artisan
 php artisan framework:permission-sync
+
 🟡 Milestone 7 — Role Engine (70%)
 Done
 ✅ Role List
@@ -180,6 +177,7 @@ database/seeders/
 RoleSeeder.php
 SuperAdminSeeder.php
 UserSeeder.php
+
 🟡 Milestone 8 — Dynamic Authorization (10%)
 Remaining
 ⬜ Sidebar Permission Filter
@@ -188,29 +186,34 @@ Remaining
 ⬜ Controller Permission Guard
 ⬜ Blade Helper
 ⬜ Permission Helper
-🟡 Milestone 9 — Developer Experience
-Framework Generator
-⬜ make:master
-⬜ make:transaction
-⬜ make:page
-⬜ CRUD Generator
-⬜ Stub Generator
+
+; 🟡 Milestone 9 — Developer Experience(Not Done Unneeded at the moment)
+; Framework Generator
+; ⬜ make:master
+; ⬜ make:transaction
+; ⬜ make:page
+; ⬜ CRUD Generator
+; ⬜ Stub Generator
+
 🟡 Milestone 10 — Release v1
 ⬜ Testing
 ⬜ Documentation
 ⬜ Versioning
 ⬜ GitHub Release
+
 🟡 Milestone 11 — Deployment
 ⬜ Auto Route Sync
 ⬜ Auto Permission Sync
 ⬜ Seeder Automation
 ⬜ Initial Setup Wizard
 📘 Framework Decision Record (LOCK)
+
 FDR-001 — Route Rules
 ✅ Route bebas jumlah segmen.
 ✅ Segmen terakhir adalah Page Action.
 ✅ Semua segmen sebelumnya dianggap Resource.
 ✅ Route hanya merepresentasikan Page.
+
 FDR-002 — Menu Rules
 ✅ system_routes menyimpan seluruh halaman.
 ✅ display_name adalah nama default halaman.
@@ -218,19 +221,15 @@ FDR-002 — Menu Rules
 ✅ Parent Menu boleh memiliki Route atau tidak.
 ✅ Child Menu wajib memiliki Route.
 ✅ Satu system_route hanya boleh dipakai oleh satu Menu.
+
 FDR-003 — Permission Rules
-
 Permission dasar berasal dari Route.
-
 list   → view
 show   → view
 create → create
 edit   → update
-
 Permission tambahan berasal dari:
-
 protected array $additionalPermissions = [];
-
 Flow:
 
 Route
@@ -256,13 +255,120 @@ Scanner Livewire menggunakan metadata route:
 livewire_component
 
 Kemudian membaca additionalPermissions langsung dari source code (regex), bukan dengan meng-instantiate anonymous component. Ini dipilih agar kompatibel dengan arsitektur Livewire MFC yang menggunakan new class extends Component.
-
 📌 Framework Principle
-
 Sebelum menambah fitur framework, selalu tanyakan:
-
 Apakah fitur ini benar-benar dibutuhkan?
 Apakah ada solusi yang lebih sederhana?
 Apakah tetap scalable?
 Apakah mudah di-maintain?
 Apakah perubahan 2 tahun lagi bisa dilakukan tanpa membongkar arsitektur?
+
+FDR-005 — Menu Creation Rules
+✅ Root Menu dapat dibuat langsung dari Menu Create.
+✅ Root Menu memiliki:
+    parent_id = null
+    system_route_id = null
+✅ Root Menu dapat dipilih kembali sebagai Parent Menu.
+✅ Parent Menu bersifat dinamis dan disimpan di database.
+✅ Menu Title otomatis mengambil display_name dari system_routes.
+✅ Admin tetap dapat mengubah Title sebelum disimpan.
+✅ Route bersifat opsional untuk Root Menu.
+✅ Child Menu dapat memiliki Route atau tidak sesuai kebutuhan.
+
+FDR-006 — Developer Permission Rules
+Untuk setiap Action bisnis baru yang bukan merupakan halaman (Page),
+Developer WAJIB mendeklarasikan permission melalui:
+protected array $additionalPermissions = [
+    'resource.action',
+];
+Contoh
+protected array $additionalPermissions = [
+
+    'master.barang.delete',
+    'master.barang.export',
+    'transaksi.penjualan.cancel',
+    'transaksi.penjualan.print',
+
+];
+PermissionSyncCommand akan menggabungkan:
+Route Permission
++
+Additional Permission
+menjadi daftar permission akhir.
+
+FDR-007 — Naming Convention
+Route Name
+master.barang.list
+master.barang.create
+master.barang.edit
+Jumlah segmen bebas.
+Segmen terakhir = Page Action.
+Semua segmen sebelumnya = Resource.
+Controller Method
+list()
+show()
+create()
+store()
+edit()
+update()
+Action bisnis:
+delete()
+print()
+export()
+import()
+approval()
+posting()
+closing()
+cancel()
+Jika action bisnis ditambahkan,
+WAJIB menambahkan permission pada:
+protected array $additionalPermissions
+
+
+// # Catatan User Pribadi
+contoh penamaan
+// | Action    | Arti                  |
+// | --------- | --------------------- |
+// | list      | Daftar                |
+// | show      | Detail                |
+// | create    | Form tambah           |
+// | store     | Simpan                |
+// | edit      | Form ubah             |
+// | update    | Proses update         |
+// | delete    | Hapus                 |
+// | destroy   | Proses hapus permanen |
+// | print     | Cetak                 |
+// | export    | Export                |
+// | import    | Import                |
+// | approve   | Approve               |
+// | reject    | Tolak                 |
+// | cancel    | Batal                 |
+// | duplicate | Salin                 |
+// | restore   | Restore               |
+// / cancelInvoice / ethod bisnis /
+// Contoh yang tidak aku sarankan:
+
+// transaksi.penjualan.print
+// transaksi.penjualan.export
+// transaksi.penjualan.approval
+
+// sebagai route halaman.
+
+// Route sebaiknya hanya untuk halaman.
+
+// Misalnya:
+
+// transaksi.penjualan.list
+// transaksi.penjualan.show
+// transaksi.penjualan.edit
+
+// Sedangkan aksi bisnis seperti:
+
+// Print
+// Export
+// Approval
+// Posting
+// Closing
+// Cancel
+
+// cukup menjadi permission tambahan ($additionalPermissions) dan method di controller, bukan halaman baru.
