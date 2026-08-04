@@ -14,7 +14,7 @@ class RouteSyncCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'route:sync';
+    protected $signature = 'framework:route-sync';
 
     /**
      * The console command description.
@@ -74,7 +74,11 @@ class RouteSyncCommand extends Command
         if (empty($syncedRoutes)) {
             return;
         }
-        SystemRoute::whereNotIn('route_name', $syncedRoutes)->delete();
+
+        SystemRoute::query()
+            ->whereNotIn('route_name', $syncedRoutes)
+            ->doesntHave('menus')
+            ->delete();
     }
 
     /**

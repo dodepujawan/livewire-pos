@@ -15,6 +15,7 @@ new class extends Component
     public $editName = '';
     public $editEmail = '';
     public $editRole = '';
+    public $editPassword = '';
 
     public $roles = [];
 
@@ -67,7 +68,7 @@ new class extends Component
 
         session()->flash('message', 'User berhasil diupdate');
 
-        return $this->redirect(route('auth.register-list'), navigate: true);
+        return $this->redirect(route('auth.register.list'), navigate: true);
     }
 
     // dia dipangil lewat $this->validate();

@@ -2,6 +2,8 @@
 
 use App\Models\Menu;
 use Livewire\Component;
+use App\Services\PermissionNameService;
+use Illuminate\Support\Collection;
 
 new class extends Component
 {
@@ -10,16 +12,18 @@ new class extends Component
 
     public function render()
     {
+        $menus = Menu::query()
+            ->with([
+                'systemRoute',
+                'children.systemRoute',
+            ])
+            ->whereNull('parent_id')
+            ->where('is_sidebar', true)
+            ->orderBy('sort_order')
+            ->get();
+
         return $this->view([
-            'menus' => Menu::query()
-                ->with([
-                    'systemRoute',
-                    'children.systemRoute',
-                ])
-                ->whereNull('parent_id')
-                ->where('is_sidebar', true)
-                ->orderBy('sort_order')
-                ->get(),
+            'menus' => $this->filterMenus($menus),
         ]);
     }
 
@@ -61,6 +65,52 @@ new class extends Component
                 $this->openedMenus[] = $menu->id;
             }
         }
+    }
+
+    protected function filterMenus(Collection $menus): Collection
+    {
+        $permissionName = app(PermissionNameService::class);
+
+        return $menus
+            ->map(function (Menu $menu) use ($permissionName) {
+
+                $children = $menu->children
+                    ->filter(function (Menu $child) use ($permissionName) {
+
+                        if (! $child->systemRoute) {
+                            return true;
+                        }
+
+                        $permission = $permissionName->fromRoute(
+                            $child->systemRoute->route_name
+                        );
+
+                        return auth()->user()?->can($permission);
+                    })
+                    ->values();
+
+                $menu->setRelation('children', $children);
+
+                // Parent tetap tampil kalau masih punya child
+                if ($children->isNotEmpty()) {
+                    return $menu;
+                }
+
+                // Parent tanpa route disembunyikan jika tidak punya child
+                if (! $menu->systemRoute) {
+                    return null;
+                }
+
+                $permission = $permissionName->fromRoute(
+                    $menu->systemRoute->route_name
+                );
+
+                return auth()->user()?->can($permission)
+                    ? $menu
+                    : null;
+            })
+            ->filter()
+            ->values();
     }
 
     public function mount(): void

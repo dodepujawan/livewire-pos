@@ -6,6 +6,7 @@ use App\Models\SystemRoute;
 use App\Services\PermissionScannerService;
 use Illuminate\Console\Command;
 use Spatie\Permission\Models\Permission;
+use App\Services\PermissionNameService;
 
 class PermissionSyncCommand extends Command
 {
@@ -20,34 +21,15 @@ class PermissionSyncCommand extends Command
     protected $description = 'Synchronize system routes into Spatie permissions';
 
     /**
-     * Route Action => Permission Action
-     */
-    private array $actionMap = [
-        'list'      => 'view',
-        'show'      => 'view',
-
-        'create'    => 'create',
-        'store'     => 'create',
-
-        'edit'      => 'update',
-        'update'    => 'update',
-
-        'destroy'   => 'delete',
-        'delete'    => 'delete',
-
-        'print'     => 'print',
-        'export'    => 'export',
-        'import'    => 'import',
-    ];
-
-    /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $permissionName = app(PermissionNameService::class);
+
         $routePermissions = SystemRoute::query()
             ->pluck('route_name')
-            ->map(fn ($route) => $this->convertPermission($route));
+            ->map(fn ($route) => $permissionName->fromRoute($route));
 
         $additionalPermissions = app(PermissionScannerService::class)->scan();
 
@@ -85,27 +67,5 @@ class PermissionSyncCommand extends Command
         $this->line('Created    : ' . $created);
 
         return self::SUCCESS;
-    }
-
-    /**
-     * Convert Route Name into Permission Name
-     *
-     * master.barang.list
-     * =>
-     * master.barang.view
-     */
-    private function convertPermission(string $routeName): string
-    {
-        $segments = explode('.', $routeName);
-
-        if (count($segments) < 2) {
-            return $routeName;
-        }
-
-        $action = array_pop($segments);
-
-        $segments[] = $this->actionMap[$action] ?? $action;
-
-        return implode('.', $segments);
     }
 }

@@ -16,12 +16,15 @@ new class extends Component
     public string $newRoleName = '';
     public string $roleName = '';
     public string $search='';
+    public array $actions = [];
 
     public function mount(): void
     {
         $this->roles = Role::orderBy('name')->get();
 
-        $this->permissionMatrix = PermissionMatrixService::build();
+        $data = PermissionMatrixService::build();
+        $this->permissionMatrix = $data['resources'];
+        $this->actions = $data['actions'];
 
         $this->selectedRoleId = $this->roles->first()?->id;
 

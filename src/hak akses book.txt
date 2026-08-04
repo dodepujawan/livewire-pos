@@ -735,3 +735,180 @@ permission:sync harus bersifat idempotent. Artinya, dijalankan berkali-kali tida
 route:sync tidak boleh menghapus route yang hilang secara otomatis. Lebih aman memberi status seperti is_active = false atau menandainya sebagai tidak ditemukan agar programmer bisa meninjau perubahan. Ini mengurangi risiko kehilangan konfigurasi jika ada route yang sementara dihapus saat development.
 
 Kalau dua aturan ini kita tetapkan sejak awal, implementasi nanti akan jauh lebih aman dan stabil. Menurutku setelah BAB 4 dan 5 ini, kita sudah siap masuk ke tahap coding dengan fondasi yang jelas.
+
+
+isi milestone 8 hapus jika sudah done
+📘 Milestone 8 — Dynamic Authorization
+
+Aku akan pecah menjadi beberapa tahap kecil.
+
+Tahap 8.1 — Sidebar Permission Filter ⭐⭐⭐⭐⭐
+
+Target:
+
+Role Kasir
+
+Permission:
+✔ barang.view
+
+Sidebar
+
+✔ Barang
+
+❌ User
+
+❌ Role
+
+❌ Permission
+
+❌ Setting
+
+Framework nanti cukup membaca permission, tanpa @can di setiap menu.
+
+Tahap 8.2 — Route Authorization ⭐⭐⭐⭐⭐
+
+Misalnya user membuka:
+
+/system/roles
+
+Framework otomatis:
+
+403 Forbidden
+
+tanpa developer menulis:
+
+->middleware('permission:system.role.view')
+
+di setiap route.
+
+Tahap 8.3 — Livewire Guard ⭐⭐⭐⭐⭐
+
+Misalnya user berhasil membuka halaman.
+
+Tetapi menekan:
+
+Save
+Delete
+Export
+
+Framework otomatis mengecek permission.
+
+Contoh:
+
+public function save()
+{
+    ...
+}
+
+Developer tidak perlu lagi menulis:
+
+Gate::authorize(...)
+
+atau
+
+abort_unless(...)
+Tahap 8.4 — Controller Guard
+
+Kalau pakai Controller biasa.
+
+Misalnya:
+
+print()
+
+delete()
+
+export()
+
+langsung dicek framework.
+
+Tahap 8.5 — Blade Helper
+
+Misalnya:
+
+<x-button permission="barang.delete">
+
+Kalau tidak punya permission
+
+↓
+
+Button tidak tampil.
+
+Tapi...
+
+Aku ingin mengubah sedikit roadmap.
+
+Authorization bukan satu milestone.
+
+Aku akan buat seperti ini.
+
+Milestone 8
+
+8.1 Sidebar Permission Filter
+
+8.2 Route Authorization
+
+8.3 Livewire Authorization
+
+8.4 Controller Authorization
+
+8.5 Blade Helper
+
+Karena tiap bagian bisa di-commit sendiri.
+
+Menurutku kita mulai dari 8.1
+
+Kenapa?
+
+Karena hasilnya langsung kelihatan.
+
+Login sebagai Kasir.
+
+Sidebar berubah.
+
+Login sebagai Admin.
+
+Sidebar berubah lagi.
+
+Developer langsung merasa:
+
+"Wah framework ini memang bekerja."
+
+Sebelum coding, aku ingin lock satu aturan (FDR-009)
+
+Ini penting karena akan mempengaruhi semua tahap berikutnya.
+
+FDR-009 — Authorization Source
+
+Framework tidak akan menyimpan permission di tabel menus.
+
+Permission selalu diambil dari system_routes.route_name.
+
+Flow:
+
+Menu
+        │
+        ▼
+System Route
+        │
+        ▼
+Route Name
+        │
+        ▼
+convertPermission()
+        │
+        ▼
+Permission
+        │
+        ▼
+auth()->user()->can(...)
+
+Jadi:
+
+menus tetap hanya mengurus tampilan.
+system_routes menjadi sumber identitas halaman.
+PermissionSyncCommand tetap menjadi satu-satunya tempat yang mengubah route menjadi permission.
+
+Aku sengaja memilih ini supaya tidak ada duplikasi data. Kalau suatu hari nama route berubah, cukup jalankan:
+
+php artisan framework:route-sync
+php artisan framework:permission-sync

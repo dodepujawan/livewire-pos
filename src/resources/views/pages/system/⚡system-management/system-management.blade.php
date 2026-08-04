@@ -74,15 +74,19 @@
 
         {{-- Table --}}
         <div class="overflow-hidden rounded-xl border border-gray-200">
-            <div class="max-h-[70vh] overflow-y-auto">
-                <table class="w-full table-fixed">
+            <div class="max-h-[70vh] overflow-auto">
+                <table class="min-w-full">
                     <thead class="sticky top-0 z-20 bg-gray-100 shadow-sm">
-                        <tr>
-                            <th class="w-[38%] px-6 py-4 text-left text-sm font-semibold uppercase">Menu</th>
-                            @foreach (['View','Create','Update','Delete','Print','Export'] as $action)
-                                <th class="w-[10%] px-2 py-4 text-center text-sm font-semibold uppercase">{{ $action }}</th>
-                            @endforeach
-                        </tr>
+                    <tr>
+                        <th class="w-72">
+                            MENU
+                        </th>
+                        @foreach($actions as $action)
+                            <th class="w-28 px-4 py-4 text-center">
+                                {{ strtoupper($action) }}
+                            </th>
+                        @endforeach
+                    </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($this->filteredPermissionMatrix as $resource)
@@ -91,14 +95,16 @@
                                     <div class="font-semibold text-gray-900">{{ $resource['label'] }}</div>
                                     <div class="mt-1 text-sm text-gray-400">{{ $resource['resource'] }}</div>
                                 </td>
-                                @foreach(['view','create','update','delete','print','export'] as $action)
-                                    <td class="text-center align-middle">
-                                        @if(isset($resource['actions'][$action]))
+                                @foreach($actions as $action)
+                                    @php
+                                        $permission = $resource['actions'][$action] ?? null;
+                                    @endphp
+                                    <td class="text-center">
+                                        @if($permission)
                                             <input
                                                 type="checkbox"
-                                                class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                                 wire:model="selectedPermissions"
-                                                value="{{ $resource['actions'][$action] }}"
+                                                value="{{ $permission }}"
                                             >
                                         @endif
                                     </td>
